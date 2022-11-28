@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "parcel build public/index.html public/*.svg --out-dir ./dist/ --public-url . --no-cache",
-    "dev": "concurrently \"parcel watch public/index.html public/*.svg --out-dir ./dist/ --public-url . --no-cache\" \"static-server\""
+    "dev": "concurrently \"parcel watch public/index.html public/*.svg --out-dir ./dist/ --public-url . --no-cache\" \"static-server dist\""
   },
   "main": "main.js",
   "dependencies": {
