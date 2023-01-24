@@ -49,7 +49,7 @@ The JS part of a Vue component should `export default` an object with the follow
 - watch: functions to be executed once the property with the same name as the function is changed, args: `newValue`, `oldValue`
 - methods: methods that can be called from the component, can access the data and props from `this.X`
 - mounted: fn to execute once the component is mounted
-- emits: list of event the component can send to its parent, can then be emitted with `this.$emits('event-name', value)`
+- emits: list of event the component can send to its parent, can then be emitted with `this.$emit('event-name', value)`
 
 ### Watch
 

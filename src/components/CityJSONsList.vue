@@ -2,6 +2,7 @@
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
+            <th scope="col">id</th>
             <th scope="col" v-for="title,col in this.columns" :key="col">
                 {{ title }}
             </th>
@@ -10,6 +11,9 @@
         <tbody>
         <tr v-for="row in Object.values(this.cityjsons.models).map(cityjson=>{return {cityjson, 'columns':this.columns}})">
             <!-- X.map(...) ~ stupid hackery needed to overcome "this" unavailable in inner v-for loop...-->
+            <a href="#" @click="modelSelected(row.cityjson.id)">
+                <td>{{row.cityjson["id"]}}</td>
+            </a>
             <td v-for="title,col in row.columns" :key="col">{{row.cityjson[col]}}</td>
         </tr>
         </tbody>
@@ -20,10 +24,16 @@
 
 export default {
     name: "CityJSONsList",
+    emits:["modelSelected"],
     props: {
         cityjsons: Object,
         columns: Object,
         ApiConsumer: Object
+    },
+    methods: {
+        modelSelected(cityjson_id){
+            this.$emit('modelSelected', cityjson_id)
+        }
     },
     mounted(){
         console.log("this.cityjsons:")

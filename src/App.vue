@@ -447,7 +447,8 @@
             </div>
             <CityJSONsList
               :cityjsons="cityModels"
-              :columns="{id:'id', created:'creation', 'updated': 'last updated'}"
+              :columns="{nbCityObjects:'# cityObjects', created:'creation', 'updated': 'last updated'}"
+              @modelSelected="selectedModelFromList"
             />
           </main>
         </div>
@@ -605,7 +606,6 @@ export default {
 	methods: {
     getCityModels(){
       this.api.getCityJsonsList().then(cm=>{
-        console.log("this.api.getCityJsonsList cm:", cm)
         this.cityModels=cm
       })
     },
@@ -686,6 +686,17 @@ export default {
 			return true;
 
 		},
+    selectedModelFromList(cityjson_id){
+      console.log("App.selectedModelFromList!! ", cityjson_id)
+      this.loading = true
+      this.api.getCityJson(cityjson_id).then(cityjson=>{
+        console.log("this.api.getCityJson(), cityjson_id: ", cityjson_id, " cityjson:", cityjson)
+				this.citymodel = cityjson;
+				this.file_loaded = true;
+        this.loading = false
+      })
+			//this.loading = true;
+    },
 		selectedFile() {
 
 			this.loading = true;
