@@ -445,6 +445,10 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+            <CityJSONsList
+              :cityjsons="cityModels"
+              :columns="{id:'id', created:'creation', 'updated': 'last updated'}"
+            />
           </main>
         </div>
       </div>
@@ -453,12 +457,16 @@
 </template>
 
 <script>
+import CityJSONsList from './components/CityJSONsList.vue';
 import ColorEditor from './components/ColorEditor.vue';
 import NinjaSidebar from './components/NinjaSidebar.vue';
 import BranchSelector from './components/Versioning/BranchSelector.vue';
 import VersionList from './components/Versioning/VersionList.vue';
+import HcjApiConsumer from "./HcjApiConsumer.js";
 import $ from 'jquery';
 import _ from 'lodash';
+
+const apiUrl = "http://localhost:8080/v1"
 
 export default {
 	name: 'App',
@@ -466,11 +474,15 @@ export default {
 		ColorEditor,
 		NinjaSidebar,
 		BranchSelector,
-		VersionList
+		VersionList,
+    CityJSONsList
 	},
 	data: function () {
 
 		return {
+      apiUrl: apiUrl,
+      api: new HcjApiConsumer(apiUrl),
+      cityModels: {models:{}},
 			file_loaded: false,
 			search_term: "",
 			citymodel: {},
@@ -526,7 +538,7 @@ export default {
 
 	},
 	computed: {
-		activeCityModel: function () {
+		activeCityModel() {
 
 			if ( this.active_version != null ) {
 
@@ -591,6 +603,12 @@ export default {
 		}
 	},
 	methods: {
+    getCityModels(){
+      this.api.getCityJsonsList().then(cm=>{
+        console.log("this.api.getCityJsonsList cm:", cm)
+        this.cityModels=cm
+      })
+    },
 		extract_citymodel( vid ) {
 
 			var object_dict = this.citymodel.versioning.versions[ vid ].objects;
@@ -726,7 +744,10 @@ export default {
 			this.download( "citymodel.json", text );
 
 		}
-	}
+	},
+  mounted(){
+    this.getCityModels()
+  }
 };
 </script>
 
