@@ -18,11 +18,11 @@ export default class HcjApiConsumer{
     }
 
     getCityJsonsList(){
-        return fetch(this.modelsUrl()).then(cj=>cj.json())
+        return fetch(this.modelsUrl()).then(response=>response.json())
     }
 
     getCityJson(cityjsonId){
-        return fetch(this.cityjsonUrl(cityjsonId)).then(cj=>cj.json())
+        return fetch(this.cityjsonUrl(cityjsonId)).then(response=>response.json())
     }
     postCityJson(cityjsonId, cityjson){
         return fetch(this.cityjsonUrl(cityjsonId), {
@@ -47,7 +47,7 @@ export default class HcjApiConsumer{
         
     }
     getCityObject(cityjsonId, cityobjectId){
-        return fetch(this.cityobjectUrl(cityjsonId, cityobjectId)).then(cj=>cj.json())
+        return fetch(this.cityobjectUrl(cityjsonId, cityobjectId)).then(response=>response.json())
     }
     postCityObject(cityjsonId, cityobjectId, cityobject){
         return fetch(this.cityobjectUrl(cityjsonId, cityobjectId), {
