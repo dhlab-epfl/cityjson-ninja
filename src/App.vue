@@ -408,45 +408,34 @@
         class="container"
         style="width:75%; max-width: 680px"
       >
-        <div class="row">
-          <main class="col-12 py-md-3 pl-md-5">
-            <h2>File upload</h2>
-            <p>Upload a CityJSON file to have fun!</p>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-upload mr-1"></i> Upload</span>
-              </div>
-              <div class="custom-file">
-                <input
-                  id="inputGroupFile01"
-                  ref="cityJSONFile"
-                  type="file"
-                  class="custom-file-input"
-                  @change="selectedFile"
-                >
-                <label
-                  class="custom-file-label"
-                  for="inputGroupFile01"
-                >Choose file or drop it here...</label>
-              </div>
-            </div>
-            <div
-              v-show="error_message"
-              class="alert alert-danger"
-              role="alert"
-            >
-              {{ error_message }}
-              <button
-                type="button"
-                class="close"
-                data-dismiss="alert"
-                aria-label="Close"
+        <main>
+          <div class="row">
+            <div class="col-12 py-md-3 pl-md-5">
+              <h2>File upload</h2>
+              <p>Upload a CityJSON file to have fun!</p>
+              <UploadCityJSON
+                @loading="modelUploading"
+                @loaded="modelUploaded"
+                @error="modelUploadError"
+              />
+              <div
+                v-show="error_message"
+                class="alert alert-danger"
+                role="alert"
               >
-                <span aria-hidden="true">&times;</span>
-              </button>
+                {{ error_message }}
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
             </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </div>
   </div>
@@ -457,6 +446,7 @@ import ColorEditor from './components/ColorEditor.vue';
 import NinjaSidebar from './components/NinjaSidebar.vue';
 import BranchSelector from './components/Versioning/BranchSelector.vue';
 import VersionList from './components/Versioning/VersionList.vue';
+import UploadCityJSON from './components/UploadCityJSON.vue';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -466,7 +456,8 @@ export default {
 		ColorEditor,
 		NinjaSidebar,
 		BranchSelector,
-		VersionList
+		VersionList,
+    UploadCityJSON
 	},
 	data: function () {
 
@@ -655,56 +646,27 @@ export default {
 			}
 
 		},
-		validateCityJSON( cm ) {
+		modelUploading() {
+      console.log("App.modelUploading!")
+        this.loading = true
 
-			if ( cm.type != "CityJSON" ) {
+    },
+    modelUploaded([filename, cityjson]) {
+      console.log("App.modelUploaded!")
+      
+				this.citymodel = cityjson;
 
-				this.error_message = "This is not a CityJSON file!";
+        this.has_versions = "versioning" in cityjson;
 
-				return false;
+        this.file_loaded = true;
 
-			}
-
-			return true;
-
-		},
-		selectedFile() {
-
-			this.loading = true;
-
-			let file = this.$refs.cityJSONFile.files[ 0 ];
-			if ( ! file || file.type != "application/json" ) {
-
-				this.error_message = "This is not a JSON file!";
-				this.loading = false;
-				return;
-
-			}
-
-			let reader = new FileReader();
-			reader.readAsText( file, "UTF-8" );
-			reader.onload = evt => {
-
-				var cm = JSON.parse( evt.target.result );
-
-				if ( this.validateCityJSON( cm ) == false ) {
-
-					this.loading = false;
-					return;
-
-				}
-
-				this.citymodel = cm;
-
-				this.has_versions = "versioning" in cm;
-
-				this.file_loaded = true;
-
-				this.loading = false;
-
-			};
-
-		},
+        this.loading = false;
+    },
+    modelUploadError(error_message) {
+      console.log("App.modelUploadError!")
+      this.loading = false
+      this.error_message = error_message
+    },
 		download( filename, text ) {
 
 			var element = document.createElement( 'a' );
