@@ -411,9 +411,6 @@
       <main>
           <div class="row">
             <div class="col-12 py-md-3 pl-md-5">
-              <h2>Choose a model</h2>
-              <p>Click on a model to have fun!</p>
-              <!-- Input to upload a hcj file -->
               <div
                 v-show="error_message"
                 class="alert alert-danger"
@@ -429,6 +426,8 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
               </div>
+              <h2>Choose a model</h2>
+              <p>Click on a model to have fun!</p>
               <CityJSONsList
                 :cityjsons="cityModels"
                 :columns="{nbCityObjects:'# cityObjects', created:'creation', 'updated': 'last updated'}"
@@ -707,9 +706,12 @@ export default {
 			//this.loading = true;
     },
     deleteModelFromList(cityjson_id){
-      this.deleteCityModel(cityjson_id).then(()=>{
-        return this.getCityModels()
-      })
+      const confirmDelete = window.confirm("This will delete the model from the server. Are you sure?")
+      if(confirmDelete){
+        this.deleteCityModel(cityjson_id).then(()=>{
+          return this.getCityModels()
+        })
+      }
     },
     modelUploading() {
       console.log("App.modelUploading!")
