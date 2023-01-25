@@ -450,6 +450,8 @@ import UploadCityJSON from './components/UploadCityJSON.vue';
 import $ from 'jquery';
 import _ from 'lodash';
 
+const MESSAGE_TIMEOUT = 5000
+
 export default {
 	name: 'App',
 	components: {
@@ -665,7 +667,13 @@ export default {
     modelUploadError(error_message) {
       console.log("App.modelUploadError!")
       this.loading = false
+      this.alert_error(error_message)
+    },
+    alert_error(error_message){
       this.error_message = error_message
+      setTimeout(()=>{
+        this.error_message = null
+      },MESSAGE_TIMEOUT)
     },
 		download( filename, text ) {
 
