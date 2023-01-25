@@ -683,14 +683,6 @@ export default {
 			}
 
 		},
-		validateCityJSON( cm ) {
-      return cm.type == "CityJSON"
-			/*if ( cm.type != "CityJSON" ) {
-				this.error_message = "This is not a CityJSON file!";
-				return false;
-			}
-			return true;*/
-		},
     selectedModelFromList(cityjson_id){
       console.log("App.selectedModelFromList!! ", cityjson_id)
       this.loading = true
@@ -736,43 +728,6 @@ export default {
         this.error_message = null
       },MESSAGE_TIMEOUT)
     },
-		selectedFile() {
-
-			this.loading = true;
-
-			let file = this.$refs.cityJSONFile.files[ 0 ];
-			if ( ! file || file.type != "application/json" ) {
-
-				this.error_message = "This is not a JSON file!";
-				this.loading = false;
-				return;
-
-			}
-
-			let reader = new FileReader();
-			reader.readAsText( file, "UTF-8" );
-			reader.onload = evt => {
-
-				var cm = JSON.parse( evt.target.result );
-
-				if ( this.validateCityJSON( cm ) == false ) {
-
-					this.loading = false;
-					return;
-
-				}
-
-				this.citymodel = cm;
-
-				this.has_versions = "versioning" in cm;
-
-				this.file_loaded = true;
-
-				this.loading = false;
-
-			};
-
-		},
 		download( filename, text ) {
 
 			var element = document.createElement( 'a' );
