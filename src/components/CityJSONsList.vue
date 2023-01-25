@@ -46,14 +46,6 @@ export default {
         deleteModel(cityjson_id){
             this.$emit('deleteModel', cityjson_id)
         }
-    },
-    mounted(){
-        console.log("this.cityjsons:")
-        console.log(Object.entries(this.cityjsons.models))
-        console.log("this.columns:")
-        console.log(this.columns)
-        console.log("Object.entries(this.columns):")
-        console.table(Object.entries(this.columns))
     }
 };
 </script>
