@@ -465,6 +465,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 const apiUrl = "http://localhost:8080/v1"
+const MESSAGE_TIMEOUT = 5000
 
 export default {
 	name: 'App',
@@ -602,6 +603,9 @@ export default {
 		}
 	},
 	methods: {
+    deleteCityModel(citymodel_id){
+      this.api(deleteCityJson)
+    },
     getCityModels(){
       this.api.getCityJsonsList().then(cityModels=>{
         this.cityModels=cityModels
