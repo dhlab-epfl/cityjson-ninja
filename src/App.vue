@@ -433,6 +433,7 @@
                 :cityjsons="cityModels"
                 :columns="{nbCityObjects:'# cityObjects', created:'creation', 'updated': 'last updated'}"
                 @modelSelected="selectedModelFromList"
+                @deleteModel="deleteModelFromList"
               />
             </div>
             </div>
@@ -603,21 +604,32 @@ export default {
 		}
 	},
 	methods: {
-    deleteCityModel(citymodel_id){
-      this.api(deleteCityJson)
-    },
     getCityModels(){
-      this.api.getCityJsonsList().then(cityModels=>{
+      return this.api.getCityJsonsList().then(cityModels=>{
         this.cityModels=cityModels
-      }).catch(e=>{
-        const default_error_message = "App.getCityModels() ERROR: "
-        console.log(default_error_message, e)
-        if(e.message.indexOf("NetworkError")>-1){
-          this.error_message="HistoricalCityJSON server unreachable at "+this.api.modelsUrl()
-        } else{
-          this.error_message = default_error_message+e.message
-        }
-      })
+        console.log("this.cityModels", this.cityModels)
+      }).catch(e =>
+        this.catch_api_error("getCityModels", this.api.modelsUrl(), e)
+      )
+    },
+    postCityModel(cityjson_id, cityjson) {
+      return this.api.postCityJson(cityjson_id, cityjson).catch(e =>
+        this.catch_api_error("postCityModel", this.api.cityjsonUrl(cityjson_id), e)
+      )
+    },
+    deleteCityModel(citymodel_id){
+      return this.api.deleteCityJson(citymodel_id).catch(e =>
+        this.catch_api_error("getCityModels", this.api.modelsUrl(), e)
+      )
+    },
+    catch_api_error(method, url, error){
+      const default_error_message = "App."+method+"() ERROR: "
+      console.log(default_error_message, error)
+      if(error.message.indexOf("NetworkError")>-1){
+        this.error_message="HistoricalCityJSON server unreachable at "+url
+      } else{
+        this.error_message = default_error_message+error.message
+      }
     },
 		extract_citymodel( vid ) {
 
@@ -694,6 +706,11 @@ export default {
       })
 			//this.loading = true;
     },
+    deleteModelFromList(cityjson_id){
+      this.deleteCityModel(cityjson_id).then(()=>{
+        return this.getCityModels()
+      })
+    },
     modelUploading() {
       console.log("App.modelUploading!")
         this.loading = true
@@ -702,19 +719,9 @@ export default {
     modelUploaded([cityjson_id, cityjson]) {
       console.log("App.modelUploaded!")
       // TODO send model to server
-      this.api.postCityJson(cityjson_id, cityjson).then(()=>{
-        return this.api.getCityJsonsList().then(cityModels=>{
-          this.loading = false
-          this.cityModels=cityModels
-        })
-      }).catch(e=>{
-        const default_error_message = "App.modelUploaded() ERROR: "
-        console.log(default_error_message, e)
-        if(e.message.indexOf("NetworkError")>-1){
-          this.error_message="HistoricalCityJSON server unreachable at "+this.api.cityjsonUrl(cityjson_id)
-        } else{
-          this.error_message = default_error_message+e.message
-        }
+      this.postCityModel(cityjson_id, cityjson).then(()=>{
+        this.loading = false
+        return this.getCityModels()
       })
     },
     modelUploadError(error_message) {
