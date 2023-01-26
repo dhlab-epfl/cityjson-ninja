@@ -254,7 +254,13 @@
                     class="d-flex justify-content-end col-auto p-0"
                   >
                     <button
-                      class="btn btn-primary col-auto"
+                      class="btn btn-warning col-auto"
+                      @click="updateModelEvent()"
+                    >
+                      <i class="fas fa-redo mr-1"></i> Update modelling
+                    </button>
+                    <button
+                      class="btn btn-primary col-auto ml-2"
                       @click="downloadModel()"
                     >
                       <i class="fas fa-download mr-1"></i> Download
@@ -431,7 +437,7 @@
               <CityJSONsList
                 :cityjsons="cityModels"
                 :columns="{nbCityObjects:'# cityObjects', created:'creation', 'updated': 'last updated'}"
-                @modelSelected="selectedModelFromList"
+                @modelSelected="getCityModel"
                 @deleteModel="deleteModelFromList"
               />
             </div>
@@ -485,6 +491,7 @@ export default {
       cityModels: {models:{}},
 			file_loaded: false,
 			search_term: "",
+			citymodel_id: null,
 			citymodel: {},
 			selected_objid: null,
 			selectedGeometryId: - 1,
@@ -606,15 +613,37 @@ export default {
     getCityModels(){
       return this.api.getCityJsonsList().then(cityModels=>{
         this.cityModels=cityModels
-        console.log("this.cityModels", this.cityModels)
+        //console.log("this.cityModels", this.cityModels)
       }).catch(e =>
         this.catch_api_error("getCityModels", this.api.modelsUrl(), e)
       )
+    },
+    getCityModel(cityjson_id){
+      this.loading = true
+      this.api.getCityJson(cityjson_id).then(cityjson=>{
+        //console.log("this.api.getCityJson(), cityjson_id: ", cityjson_id, " cityjson:", cityjson)
+				this.citymodel = cityjson;
+        this.citymodel_id = cityjson_id;
+				this.file_loaded = true;
+      }).catch(e =>
+        this.catch_api_error("getCityModel", this.api.cityjsonUrl(cityjson_id), e)
+      ).then(()=>{
+        this.loading = false
+      })
+			//this.loading = true;
     },
     postCityModel(cityjson_id, cityjson) {
       return this.api.postCityJson(cityjson_id, cityjson).catch(e =>
         this.catch_api_error("postCityModel", this.api.cityjsonUrl(cityjson_id), e)
       )
+    },
+    updateCityModel(cityjson_id) {
+      this.loading = true
+      return this.api.updateCityJsonModelling(cityjson_id).catch(e =>
+        this.catch_api_error("updateCityModel", this.api.cityjsonUpdateUrl(cityjson_id), e)
+      ).then(()=>{
+        this.loading = false
+      })
     },
     deleteCityModel(citymodel_id){
       return this.api.deleteCityJson(citymodel_id).catch(e =>
@@ -623,12 +652,11 @@ export default {
     },
     catch_api_error(method, url, error){
       const default_error_message = "App."+method+"() ERROR: "
-      console.log(default_error_message, error)
+      let error_message = default_error_message+error.message
       if(error.message.indexOf("NetworkError")>-1){
-        this.error_message="HistoricalCityJSON server unreachable at "+url
-      } else{
-        this.error_message = default_error_message+error.message
-      }
+        error_message="HistoricalCityJSON server unreachable at "+url
+      } 
+      this.alert_error(error_message)
     },
 		extract_citymodel( vid ) {
 
@@ -671,6 +699,7 @@ export default {
 		reset() {
 
 			this.citymodel = {};
+      this.citymodel_id = null;
 			this.search_term = "";
 			this.file_loaded = false;
 
@@ -694,17 +723,6 @@ export default {
 			}
 
 		},
-    selectedModelFromList(cityjson_id){
-      console.log("App.selectedModelFromList!! ", cityjson_id)
-      this.loading = true
-      this.api.getCityJson(cityjson_id).then(cityjson=>{
-        console.log("this.api.getCityJson(), cityjson_id: ", cityjson_id, " cityjson:", cityjson)
-				this.citymodel = cityjson;
-				this.file_loaded = true;
-        this.loading = false
-      })
-			//this.loading = true;
-    },
     deleteModelFromList(cityjson_id){
       const confirmDelete = window.confirm("This will delete the model from the server. Are you sure?")
       if(confirmDelete){
@@ -714,12 +732,10 @@ export default {
       }
     },
     modelUploading() {
-      console.log("App.modelUploading!")
         this.loading = true
 
     },
     modelUploaded([cityjson_id, cityjson]) {
-      console.log("App.modelUploaded!")
       // TODO send model to server
       this.postCityModel(cityjson_id, cityjson).then(()=>{
         this.loading = false
@@ -727,11 +743,11 @@ export default {
       })
     },
     modelUploadError(error_message) {
-      console.log("App.modelUploadError!")
       this.loading = false
       this.alert_error(error_message)
     },
     alert_error(error_message){
+      console.error(error_message)
       this.error_message = error_message
       setTimeout(()=>{
         this.error_message = null
@@ -757,7 +773,12 @@ export default {
 
 			this.download( "citymodel.json", text );
 
-		}
+		},
+    updateModelEvent(){
+      this.updateCityModel(this.citymodel_id).then(()=>{
+        return this.getCityModel(this.citymodel_id)
+      })
+    }
 	},
   mounted(){
     this.getCityModels()

@@ -1,6 +1,7 @@
 
 const CITYJSON_PATH="models"
 const CITYOBJECT_PATH="cityobjects"
+const UPDATE_PATH="update"
 
 export default class HcjApiConsumer{
     constructor(baseurl){
@@ -13,8 +14,14 @@ export default class HcjApiConsumer{
     cityjsonUrl(cityjsonId){
         return [this.modelsUrl(),cityjsonId].join("/")
     }
+    cityjsonUpdateUrl(cityjsonId){
+        return [this.cityjsonUrl(cityjsonId),UPDATE_PATH].join("/")
+    }
     cityobjectUrl(cityjsonId, cityobjectId){
         return [this.cityjsonUrl(cityjsonId), CITYOBJECT_PATH, cityobjectId].join("/")
+    }
+    cityobjectUpdateUrl(cityjsonId, cityobjectId){
+        return [this.cityobjectUrl(cityjsonId, cityobjectId), UPDATE_PATH].join("/")
     }
 
     getCityJsonsList(){
@@ -34,6 +41,14 @@ export default class HcjApiConsumer{
             body: JSON.stringify(cityjson)
         }).then( (response) => { 
             console.log("CJ POST response", response)
+            return response
+        });
+    }
+    updateCityJsonModelling(cityjsonId){
+        return fetch(this.cityjsonUpdateUrl(cityjsonId), {
+            method: "post"
+        }).then( (response) => { 
+            console.log("CJ UPDATE response", response)
             return response
         });
     }
@@ -59,6 +74,14 @@ export default class HcjApiConsumer{
             body: JSON.stringify(cityobject)
         }).then( (response) => { 
             console.log("CO POST response", response)
+            return response
+        });
+    }
+    updateCityObjectModelling(cityjsonId, cityobjectId){
+        return fetch(this.cityobjectUpdateUrl(cityjsonId, cityobjectId), {
+            method: "post"
+        }).then( (response) => { 
+            console.log("CO UPDATE response", response)
             return response
         });
     }
