@@ -303,7 +303,7 @@
               class="col-auto m-2"
               style="position: absolute; z-index: 1"
             >
-              <CityObjectCard
+              <HistoricalCityObjectCard
                 v-if="existsSelected"
                 :citymodel="activeCityModel"
                 :cityobject="activeCityModel.CityObjects[selected_objid]"
@@ -314,7 +314,7 @@
                 :editable="true"
                 @input="activeCityModel.CityObjects[selected_objid] = $event"
                 @close="selected_objid = null"
-              ></CityObjectCard>
+              ></HistoricalCityObjectCard>
             </div>
             <ThreeJsViewer
               ref="viewer"
@@ -475,6 +475,7 @@ import VersionList from './components/Versioning/VersionList.vue';
 import HcjApiConsumer from "./HcjApiConsumer.js";
 import CityJSONsList from './components/CityJSONsList.vue';
 import UploadCityJSON from './components/UploadCityJSON.vue';
+import HistoricalCityObjectCard from './components/HistoricalCityObjectCard.vue';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -489,7 +490,8 @@ export default {
 		BranchSelector,
 		VersionList,
     CityJSONsList,
-    UploadCityJSON
+    UploadCityJSON,
+    HistoricalCityObjectCard
 	},
 	data: function () {
 

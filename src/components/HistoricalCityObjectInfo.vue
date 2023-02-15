@@ -163,17 +163,14 @@
 
 <script>
 import $ from "jquery";
-import { getIconStyle } from '../helpers/icons';
+import { getIconStyle } from '../../cityjson-vue-components/src/helpers/icons';
 
-import ExpandableBadge from "./common/ExpandableBadge.vue";
-import GeometryBadge from "./common/GeometryBadge.vue";
+//import ExpandableBadge from "./common/ExpandableBadge.vue";
+//import GeometryBadge from "./common/GeometryBadge.vue";
 
 export default {
-	name: "CityObjectInfo",
-	components: {
-		ExpandableBadge,
-		GeometryBadge,
-	},
+	name: "HistoricalCityObjectInfo",
+	components: {},
 	props: {
 		citymodel: Object,
 		cityobject: Object,

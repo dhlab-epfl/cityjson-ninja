@@ -8,7 +8,7 @@
       class="card-body"
       style="overflow: auto; max-height: 600px"
     >
-      <CityObjectInfo
+      <HistoricalCityObjectInfo
         :citymodel="citymodel"
         :cityobject="cityobject"
         :cityobject_id="cityobject_id"
@@ -17,18 +17,18 @@
         :editable="editable"
         @input="saveChanges"
         @close="$emit('close')"
-      ></CityObjectInfo>
+      ></HistoricalCityObjectInfo>
     </div>
   </div>
 </template>
 
 <script>
-import CityObjectInfo from './CityObjectInfo.vue';
+import HistoricalCityObjectInfo from './HistoricalCityObjectInfo.vue';
 
 export default {
-	name: "CityObjectCard",
+	name: "HistoricalCityObjectCard",
 	components: {
-		CityObjectInfo
+		HistoricalCityObjectInfo
 	},
 	props: {
 		citymodel: Object,
