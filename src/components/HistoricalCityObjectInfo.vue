@@ -6,16 +6,24 @@
           {{ cityobject.type }}</small>
       </div>
       <div
-        v-if="editable"
         class="col-auto p-0"
       >
-        <button
+      <button
+          v-if="editable"
           class="btn btn-sm"
-          :class="[edit_mode ? 'btn-warning' : 'btn-outline-warning']"
-          @click="edit_mode = !edit_mode"
+          :class="[edit_mode ? (edit_mode=='form'? 'btn-warning' : 'btn-danger') : 'btn-outline-warning']"
+          @click="edit_mode = edit_mode ? false : 'form'"
         >
           <i class="fas fa-pen mr-1"></i>
           {{ edit_mode ? "Close edit" : "Edit" }}
+        </button>
+        <button
+          v-if="edit_mode =='form'"
+          class="btn btn-sm btn-danger"
+          @click="edit_mode = 'raw'"
+        >
+          <i class="fas fa-pen mr-1"></i>
+            Edit raw
         </button>
         <button
           type="button"
@@ -141,12 +149,23 @@
           </li>
         </ul>
       </div>
-      <div v-show="edit_mode">
+      <div v-show="edit_mode=='raw'">
         <textarea
           id="json_data"
           v-model="jsonString"
           class="form-control"
         ></textarea>
+        <div class="d-flex justify-content-end mt-2">
+          <button
+            type="button"
+            class="btn btn-success btn-sm"
+            @click="saveChanges"
+          >
+            <i class="fas fa-save mr-1"></i> Save
+          </button>
+        </div>
+      </div><div v-show="edit_mode=='form'">
+        YoUR FOrm heRE
         <div class="d-flex justify-content-end mt-2">
           <button
             type="button"
