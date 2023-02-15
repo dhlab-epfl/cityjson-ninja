@@ -1,8 +1,13 @@
 import Vue from 'vue';
 import App from './App.vue';
 import CityJSONComponents from '../cityjson-vue-components/src/entry';
+import { ArrayEditor, ObjectEditor, JSONEditor } from "vue-schema-based-json-editor";
 
 Vue.use( CityJSONComponents );
+Vue.component('array-editor', ArrayEditor)
+Vue.component('object-editor', ObjectEditor)
+Vue.component('json-editor', JSONEditor)
+
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';

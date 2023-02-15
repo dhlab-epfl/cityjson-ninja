@@ -16,7 +16,8 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "three": "^0.127.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-schema-based-json-editor": "^7.25.2"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.3.0",
