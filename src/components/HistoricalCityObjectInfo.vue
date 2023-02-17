@@ -166,6 +166,10 @@
         </div>
       </div><div v-show="edit_mode=='form'">
         YoUR FOrm heRE
+        <HistoricalCityObjectEditor
+          :cityobject="cityobject"
+		      :cityobject_id="cityobject_id"
+        />
         <div class="d-flex justify-content-end mt-2">
           <button
             type="button"
@@ -184,12 +188,14 @@
 import $ from "jquery";
 import { getIconStyle } from '../../cityjson-vue-components/src/helpers/icons';
 
-//import ExpandableBadge from "./common/ExpandableBadge.vue";
+import HistoricalCityObjectEditor from "./HistoricalCityObjectEditor.vue";
 //import GeometryBadge from "./common/GeometryBadge.vue";
 
 export default {
 	name: "HistoricalCityObjectInfo",
-	components: {},
+	components: {
+    HistoricalCityObjectEditor
+  },
 	props: {
 		citymodel: Object,
 		cityobject: Object,
