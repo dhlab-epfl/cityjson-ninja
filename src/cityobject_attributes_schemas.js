@@ -62,6 +62,7 @@ export const paradataSchema = {
     "date": {
       "title": "Date",
       "type": "string",
+      "format": "date",
       //"description": "a string description example",
       "default": "",
     },
@@ -104,6 +105,186 @@ export const heightSchema = {
     },
     required: ["value"]
 }
+
+
+
+
+
+
+
+
+
+
+
+
+export const roofDefaultValue ={
+  "type": {
+    "value": "gable",
+    "metadata": {
+      "source": "random['hip', 'gable', 'flat']"
+    }
+  },
+  "parameters": {
+    "slope": {
+      "value": 0.409,
+      "metadata": {
+        "source": "random[0.3, 0.6]"
+      }
+    },
+    "upperFloorThickness": {
+      "value": 0.248,
+      "metadata": {
+        "source": "random[0.2, 0.3]"
+      }
+    },
+    "eavesOverhang": {
+      "value": 0.374,
+      "metadata": {
+        "source": "random[0.2, 0.4]"
+      }
+    },
+    "ids_gable": {
+      "value": null,
+      "metadata": {
+        "source": "automatic"
+      }
+    }
+  }
+}
+export const roofSchema = {
+  "title": "Roof",
+  "type": "object",
+  //"description": "a description example",
+  "properties": {
+    "type": {
+      "title": "Roof type",
+      "type": "object",
+      "className": SUB_OBJECT_HTML_CLASS,
+      "properties": {
+        "value": {
+          "title": "Value",
+          "type": "string",
+          "default": "hip",
+        },
+        "metadata": {...metadataSchema, "collapsed": true},
+        "paradata": {...paradataSchema, "collapsed": true}
+      },
+      required: ["value"]
+    },
+    "parameters": {
+      "title": "Roof Parameters",
+      "type": "object",
+      "collapsed": true,
+      "className": SUB_OBJECT_HTML_CLASS,
+      "properties": {
+        "slope": {
+          "title": "Roof slope",
+          "type": "object",
+          "collapsed": true,
+          "className": SUB_OBJECT_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+              "default": 0.3,
+            },
+            "metadata": {...metadataSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+          required: ["value"]
+        },
+        "upperFloorThickness": {
+          "title": "Upper floor thickness",
+          "type": "object",
+          "collapsed": true,
+          "className": SUB_OBJECT_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+              "default": 0.2,
+            },
+            "metadata": {...metadataSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+          required: ["value"]
+        },
+        "eavesOverhang": {
+          "title": "Eaves Overhang",
+          "type": "object",
+          "collapsed": true,
+          "className": SUB_OBJECT_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+              "default": 0.3,
+            },
+            "metadata": {...metadataSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+          required: ["value"]
+        },
+        // only for flat roof
+        "baseFloorThickness": {
+          "title": "Base floor thickness",
+          "type": "object",
+          "collapsed": true,
+          "className": SUB_OBJECT_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+              "default": 0.3,
+            },
+            "metadata": {...metadataSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+          required: ["value"]
+        },
+        "railingHeight": {
+          "title": "Railing height",
+          "type": "object",
+          "collapsed": true,
+          "className": SUB_OBJECT_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+              "default": 1,
+            },
+            "metadata": {...metadataSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+          required: ["value"]
+        },
+        "railingWidth": {
+          "title": "Railing width",
+          "type": "object",
+          "collapsed": true,
+          "className": SUB_OBJECT_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+              "default": 0.15,
+            },
+            "metadata": {...metadataSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+          required: ["value"]
+        },
+      },
+    },
+  },
+  required: ["type"]
+}
+
+
+
+
+
+
 
 
 const compleetestSchema = {

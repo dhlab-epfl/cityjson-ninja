@@ -33,7 +33,7 @@
 
 
 .sub-object-editor h3{
-  font-size: 1.1em;
+  font-size: 1em;
   /*color: red;*/
 }
 .sub-object-editor h3 .schema-based-json-editor--checkbox{
@@ -68,8 +68,8 @@ export default {
 		return {
 			edit_mode: false,
 			expanded: 0,
-      schema: cas.heightSchema,
-      initialValue: cas.heightDefaultValue
+      schema: cas.roofSchema,
+      initialValue: cas.roofDefaultValue
 		};
 
 	},
