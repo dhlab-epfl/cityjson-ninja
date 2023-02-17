@@ -165,7 +165,6 @@
           </button>
         </div>
       </div><div v-show="edit_mode=='form'">
-        YoUR FOrm heRE
         <HistoricalCityObjectEditor
           :cityobject="cityobject"
 		      :cityobject_id="cityobject_id"

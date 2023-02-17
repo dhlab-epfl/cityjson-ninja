@@ -434,14 +434,6 @@
               </div>
               <h2>Choose a model</h2>
               <p>Click on a model to have fun!</p>
-              <p>p pre json-editor </p>
-                <json-editor :schema="schema"
-                  :initial-value="initialValue"
-                  @update-value="updateNumberExample($event)"
-                  theme="bootstrap3"
-                  icon="fontawesome4">
-                </json-editor>
-              <p>p post json-editor </p>
               <CityJSONsList
                 :cityjsons="cityModels"
                 :columns="{nbCityObjects:'# cityObjects', created:'creation', 'updated': 'last updated'}"
@@ -550,20 +542,7 @@ export default {
 			highlightSurface: false,
 			availableLoDs: [],
 			activeLoD: - 1,
-			cameraLight: false,
-      schema: {
-        "type": "number",
-        "title": "A number example",
-        "description": "a number description example",
-        "default": 123.4,
-        "minimum": 10,
-        "exclusiveMinimum": true,
-        "maximum": 1000,
-        "exclusiveMaximum": true
-      },
-      initialValue: {
-        numberExample: 123.4
-      },
+			cameraLight: false
 		};
 
 	},
@@ -801,10 +780,7 @@ export default {
       this.updateCityModel(this.citymodel_id).then(()=>{
         return this.getCityModel(this.citymodel_id)
       })
-    },
-    updateNumberExample(c){
-      console.log("updateNumberExample value:", c)
-    },
+    }
 	},
   mounted(){
     this.getCityModels()
