@@ -18,30 +18,28 @@
     <!-- built files will be auto injected -->
     <script src="../src/main.js"></script>
     <script>
+      // Goal of this small script is simply to make fontawesome icons from v4 used by
+      // schema-based-json-editor compatible with free fontawesome icons v5
       const moConfig = {
         childList: true,
         attributes: true, subtree: true,
         attributeFilter: ["class"]
       }
-      function moCallback(event){
-        console.log("event", event)
-        const collection = document.getElementsByClassName("fa");
-        /*for (let i = 0; i < collection.length; i++) {
-          console.log(collection[i])
-        }*/
-        console.log("collection", collection)
-        for (const element of collection) {
-          for (const cl of element.classList) {
-            if(cl.includes("-o")){
-              const non_o_class = cl.replace(/-o-/g, '-')
-              if(!element.className.includes(non_o_class)){
-                //element.remove.add(cl);
-                element.classList.add(non_o_class);
+      function moCallback(mutationRecords){
+        //console.log("mutationRecords", mutationRecords)
+        for (const mutationRecord of mutationRecords) {
+          //console.log("mutationRecord.target", mutationRecord.target)
+          const faIcons = mutationRecord.target.getElementsByClassName("fa");
+          for (const icon of faIcons) {
+            for (const cl of icon.classList) {
+              if(cl.includes("-o")){
+                const non_o_class = cl.replace(/-o-/g, '-')
+                if(!icon.className.includes(non_o_class)){
+                  icon.classList.add(non_o_class);
+                }
               }
             }
           }
-          console.log("fa element: ", element, " element.classList", element.classList)
-          console.log("fa element: ", element)
         }
       }
       const moObserver = new MutationObserver(moCallback);
