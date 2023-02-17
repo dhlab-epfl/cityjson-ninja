@@ -14,7 +14,7 @@ export const metadataSchema = {
   "properties": {
     "uncertainty": {
       "type": "number",
-      "title": "Value",
+      "title": "Uncertainty",
       //"description": "a number description example",
       "default": 1,
       "minimum": 0,
@@ -98,7 +98,7 @@ export const heightSchema = {
         "exclusiveMaximum": true
       },
       "metadata": {...metadataSchema, "collapsed": true},
-      "paradata": paradataSchema
+      "paradata": {...paradataSchema, "collapsed": true}
     },
     required: ["value"]
 }

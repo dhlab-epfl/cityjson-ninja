@@ -13,22 +13,24 @@
 
 
 <style>
+
 .historical-city-json-editor.schema-based-json-editor--row {
   /* correct weird -15px margins */
   margin-left: 0px;
   margin-right: 0px;
+  display: flex;
+  flex-direction: column;
 }
 .historical-city-json-editor .schema-based-json-editor--row {
   /* correct weird -15px margins */
   margin-left: 0px;
   margin-right: 0px;
+  padding-left: 1em;
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid #efefef;
 }
 
-.schema-based-json-editor--checkbox{
-
-  display:flex;
-  align-items:flex-end;
-}
 
 .sub-object-editor h3{
   font-size: 1.2em;
@@ -39,6 +41,12 @@
   /*color: pink;*/
 }
 
+.schema-based-json-editor--checkbox{
+  /* ensure "not exists" checkboxes are bottom aligned */
+  display:flex;
+  align-items:flex-end;
+  padding: 0.2em;
+}
 
 </style>
 
