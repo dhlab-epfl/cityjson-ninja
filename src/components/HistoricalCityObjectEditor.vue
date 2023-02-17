@@ -33,7 +33,7 @@
 
 
 .sub-object-editor h3{
-  font-size: 1.2em;
+  font-size: 1.1em;
   /*color: red;*/
 }
 .sub-object-editor h3 .schema-based-json-editor--checkbox{
