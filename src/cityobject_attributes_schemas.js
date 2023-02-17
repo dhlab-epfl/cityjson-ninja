@@ -7,14 +7,14 @@ export const metadataDefaultValue = {
   "notes": ""
 }
 export const metadataSchema = {
-  "type": "object",
   "title": "Metadata",
+  "type": "object",
   "className": SUB_OBJECT_HTML_CLASS,
   //"description": "a description example",
   "properties": {
     "uncertainty": {
-      "type": "number",
       "title": "Uncertainty",
+      "type": "number",
       //"description": "a number description example",
       "default": 1,
       "minimum": 0,
@@ -23,14 +23,15 @@ export const metadataSchema = {
       "exclusiveMaximum": false
     },
     "source": {
-      "type": "string",
       "title": "Source",
+      "type": "string",
       //"description": "a string description example",
       "default": "",
     },
     "notes": {
-      "type": "string",
       "title": "Notes",
+      "type": "string",
+      "format": "textarea",
       //"description": "a string description example",
       "default": "",
     },
@@ -47,26 +48,27 @@ export const paradataDefaultValue = {
   "comments": ""
 }
 export const paradataSchema = {
-  "type": "object",
   "title": "Paradata",
+  "type": "object",
   "className": SUB_OBJECT_HTML_CLASS,
   //"description": "a description example",
   "properties": {
     "author": {
-      "type": "string",
       "title": "Author",
+      "type": "string",
       //"description": "a string description example",
       "default": "",
     },
     "date": {
-      "type": "string",
       "title": "Date",
+      "type": "string",
       //"description": "a string description example",
       "default": "",
     },
     "comments": {
-      "type": "string",
       "title": "Comments",
+      "type": "string",
+      "format": "textarea",
       //"description": "a string description example",
       "default": "",
     },
@@ -83,13 +85,13 @@ export const heightDefaultValue = {
   paradata: {}
 }
 export const heightSchema = {
+  "title": "Height",
     "type": "object",
-    "title": "Height",
     //"description": "a description example",
     "properties": {
       "value": {
-        "type": "number",
         "title": "Value",
+        "type": "number",
         //"description": "a number description example",
         "default": 1,
         "minimum": 1,
