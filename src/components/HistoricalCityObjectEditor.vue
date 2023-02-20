@@ -1,13 +1,12 @@
 <template>
   <div>
-
       <json-editor
-        v-for="sgf in supportedGeomFeatures"
-        :key="sgf"
+        v-for="geomFeature in supportedGeomFeatures"
+        :key="geomFeature"
         class="historical-city-json-editor"
-        :schema="schemas[sgf]"
-        :initial-value="latestSaves[sgf]"
-        @update-value="($event)=>updateGeomFeature(sgf, $event)"
+        :schema="schemas[geomFeature]"
+        :initial-value='cityobject["attributes"]["geomFeatures"][geomFeature]'
+        @update-value="($event)=>updateGeomFeature(geomFeature, $event)"
         theme="bootstrap3"
         icon="fontawesome4"
         noSelect2
@@ -73,6 +72,9 @@ export default {
 		cityobject: Object,
 		cityobject_id: String,
 	},
+  emits: [
+    "cityobject_updated" // sends new version of the cityobject
+  ],
 	data() {
 		return {
 			edit_mode: false,
@@ -81,13 +83,12 @@ export default {
       initialValue: cas.roofDefaultValue,
       supportedGeomFeatures: [],
       unsupportedGeomFeatures: [], // unused.
-      latestSaves: {}, // per geomFeature: last saved version
       latestUpdates: {} // per geomFeature: last updated version
 		};
 
 	},
 	computed: {
-    existingGeomFeatures: function(){
+    existingGeomFeatures(){
       if(
         typeof this.cityobject["attributes"] === 'object' &&
         this.cityobject["attributes"] !== null &&
@@ -98,31 +99,54 @@ export default {
       }else{
         return []
       }
+    },
+    saveChanges(){
+      Object.keys(this.latestUpdates).map(geomFeature=>{
+        if(this.latestUpdates[geomFeature]!==undefined && this.latestUpdates[geomFeature]!==null){
+          this.cityobject["attributes"]["geomFeatures"][geomFeature] = {...this.latestUpdates[geomFeature]}
+          this.latestUpdates[geomFeature] = undefined
+          this.$emit( "cityobject_updated", this.cityobject );
+        }
+      })
+    },
+    hasUnsavedChanges(){
+      return Object.keys(this.latestUpdates).filter(k=> k!== undefined && k!==null).length>0
     }
 	},
 	methods: {
     updateGeomFeature(geomFeature, event){
       console.log("updateExample geomFeature:", geomFeature, ", event", event)
+      if(this.latestUpdates[geomFeature]===null){
+        this.latestUpdates[geomFeature] = undefined
+      } else if(
+        this.latestUpdates[geomFeature]===undefined &&
+        event.isValid
+      ){
+        this.latestUpdates[geomFeature] = event.value
+      }
     },
-    init(){
+    resetSavesAndUpdates(){
       const geomFeatures = this.existingGeomFeatures
       // supportedGeomFeatures in correct order
       this.supportedGeomFeatures = Object.keys(cas.schemas).filter(gf=>geomFeatures.includes(gf))
       this.unsupportedGeomFeatures = geomFeatures.filter(gf=>cas.schemas[gf])
 
-      this.schemas = {}
-      this.latestSaves = {}
       this.latestUpdates = {}
       this.supportedGeomFeatures.forEach(sgf =>{
-        this.latestSaves[sgf] = {...this.cityobject["attributes"]["geomFeatures"][sgf]}
-        this.latestUpdates[sgf] = false
-        this.schemas[sgf] = {...cas.schemas[sgf], collapsed: true}
+        this.latestUpdates[sgf] = null
       })
-
+    },
+    init(){
+      // init this.schemas
+      this.schemas = {}
+      Object.keys(cas.schemas).forEach(schemaName =>{
+        this.schemas[schemaName] = {...cas.schemas[schemaName], collapsed: true}
+      })
       console.log("init() this.supportedGeomFeatures", this.supportedGeomFeatures)
+      this.resetSavesAndUpdates()
     },
     reset(){
-      this.init()
+      this.resetSavesAndUpdates()
     }
 	},
   watch: {
@@ -130,7 +154,7 @@ export default {
       this.reset()
     }
   },
-  mounted(){
+  mounted(){    
     this.init()
   }
 };
