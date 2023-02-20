@@ -6,7 +6,7 @@
   >
     <div
       class="card-body"
-      style="overflow: auto; max-height: 600px"
+      style="overflow: auto; max-height: 80%"
     >
       <HistoricalCityObjectInfo
         :citymodel="citymodel"

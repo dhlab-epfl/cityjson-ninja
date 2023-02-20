@@ -97,7 +97,61 @@ export const heightSchema = {
         "default": 1,
         "minimum": 1,
         "exclusiveMinimum": false,
+        "maximum": 1000,
+        "exclusiveMaximum": true
+      },
+      "metadata": {...metadataSchema, "collapsed": true},
+      "paradata": {...paradataSchema, "collapsed": true}
+    },
+    required: ["value"]
+}
+
+
+export const floorHeightDefaultValue = {
+  value: 1,
+  metadata: {},
+  paradata: {}
+}
+export const floorHeightSchema = {
+  "title": "Floor height",
+    "type": "object",
+    //"description": "a description example",
+    "properties": {
+      "value": {
+        "title": "Value",
+        "type": "number",
+        //"description": "a number description example",
+        "default": 1,
+        "minimum": 1,
+        "exclusiveMinimum": false,
         "maximum": 500,
+        "exclusiveMaximum": true
+      },
+      "metadata": {...metadataSchema, "collapsed": true},
+      "paradata": {...paradataSchema, "collapsed": true}
+    },
+    required: ["value"]
+}
+
+
+export const numberOfFloorsDefaultValue = {
+  value: 1,
+  metadata: {},
+  paradata: {}
+}
+export const numberOfFloorsSchema = {
+  "title": "Number of floors",
+    "type": "object",
+    //"description": "a description example",
+    "properties": {
+      "value": {
+        "title": "Value",
+        "type": "number",
+        //"description": "a number description example",
+        "default": 1,
+        "minimum": 1,
+        "exclusiveMinimum": false,
+        "maximum": 1000,
         "exclusiveMaximum": true
       },
       "metadata": {...metadataSchema, "collapsed": true},
@@ -289,18 +343,15 @@ export const roofSchema = {
 
 
 
-export const enumSchema = {
-  "title": "ENUM TEST",
-  "type": "string",
-  "enum": [
-    "enum 1",
-    "enum 2"
-  ],
-  "propertyOrder": 10
+export const schemas = {
+  height: heightSchema,
+  numberOfFloors: numberOfFloorsSchema,
+  floorHeight: floorHeightSchema,
+  roof: roofSchema,
+  metadata: metadataSchema,
+  paradata: paradataSchema,
 }
-
-
-
+export default schemas
 
 const compleetestSchema = {
     "type": "object",
