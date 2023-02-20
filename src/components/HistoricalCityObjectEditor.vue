@@ -6,7 +6,9 @@
         :initial-value="initialValue"
         @update-value="updateExample($event)"
         theme="bootstrap3"
-        icon="fontawesome4">
+        icon="fontawesome4"
+        noSelect2
+        >
       </json-editor>
   </div>
 </template>
@@ -64,7 +66,6 @@ export default {
 		cityobject_id: String,
 	},
 	data() {
-
 		return {
 			edit_mode: false,
 			expanded: 0,

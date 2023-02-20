@@ -115,7 +115,12 @@ export const heightSchema = {
 
 
 
-
+export const roofTypes = [
+  "hip",
+  "gable",
+  "flat",
+  "domed"
+]
 
 export const roofDefaultValue ={
   "type": {
@@ -164,7 +169,9 @@ export const roofSchema = {
         "value": {
           "title": "Value",
           "type": "string",
-          "default": "hip",
+          //"default": "hip",
+          "format": "select",
+          "enum": roofTypes
         },
         "metadata": {...metadataSchema, "collapsed": true},
         "paradata": {...paradataSchema, "collapsed": true}
@@ -282,7 +289,15 @@ export const roofSchema = {
 
 
 
-
+export const enumSchema = {
+  "title": "ENUM TEST",
+  "type": "string",
+  "enum": [
+    "enum 1",
+    "enum 2"
+  ],
+  "propertyOrder": 10
+}
 
 
 
