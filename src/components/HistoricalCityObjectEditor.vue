@@ -92,9 +92,7 @@ export default {
 	data() {
 		return {
 			edit_mode: false,
-			expanded: 0,
       schema: cas.geomFeatureSchema,
-      initialValue: cas.roofDefaultValue,
       //supportedGeomFeatures: [],
       //unsupportedGeomFeatures: [], // unused.
       latestUpdate: {} // per geomFeature: last updated version
@@ -137,6 +135,7 @@ export default {
       this.resetSavesAndUpdates()
     },
     reset(){
+      console.log("HistoricalCityObjectEditor.reset()")
       this.resetSavesAndUpdates()
     }
 	},
