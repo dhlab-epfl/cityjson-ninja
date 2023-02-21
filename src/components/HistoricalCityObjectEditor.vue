@@ -36,6 +36,9 @@
   padding-left: 1em;
   border-left: 2px solid #efefef;
 }
+.historical-city-json-editor .schema-based-json-editor--card:hover {
+  border-left: 2px solid #99caff; /*#bbeff7;*/
+}
 
 
 .historical-city-json-editor h3{
@@ -47,9 +50,6 @@
 .geom-feature-editor h3{
   font-size: 1em;
   /*color: red;*/
-}
-.geom-feature-editor .schema-based-json-editor--card:hover {
-  border-left: 2px solid #99caff; /*#bbeff7;*/
 }
 
 .geom-feature-editor input{
