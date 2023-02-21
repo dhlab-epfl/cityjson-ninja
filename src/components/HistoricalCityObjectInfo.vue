@@ -165,11 +165,11 @@
           </button>
         </div>
       </div>
-        <div v-if="edit_mode=='form'">
+      <div v-if="edit_mode=='form'">
         <HistoricalCityObjectEditor
           :geomFeatures='geomFeatures'
           @geomFeatures-updated="geomFeaturesUpdate"
-        />
+        ></HistoricalCityObjectEditor>
         <div class="d-flex justify-content-end mt-2">
           <button
             type="button"
