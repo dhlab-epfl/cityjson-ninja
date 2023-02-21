@@ -610,16 +610,16 @@ export default {
 		}
 	},
 	watch: {
-		selected_objid: function () {
+		/*selected_objid () {
 
 			if ( this.selected_objid != null ) {
-
+        console.log("App.watch.selected_objid() selected_objid: ", this.selected_objid)
 				var card_id = $.escapeSelector( this.selected_objid );
 				$( `#${card_id}` )[ 0 ].scrollIntoViewIfNeeded();
 
 			}
 
-		}
+		}*/
 	},
 	methods: {
     getCityModels(){
