@@ -9,32 +9,23 @@
         class="col-auto p-0"
       >
       <button
-          v-if="editable"
-          class="btn btn-sm"
-          :class="[edit_mode ? (edit_mode=='form'? 'btn-warning' : 'btn-danger') : 'btn-outline-warning']"
-          @click="edit_mode = edit_mode ? false : 'form'"
-        >
-          <i class="fas fa-pen mr-1"></i>
-          {{ edit_mode ? "Close edit" : "Edit" }}
-        </button>
-        <button
-          v-if="edit_mode =='form'"
-          class="btn btn-sm btn-danger"
-          @click="edit_mode = 'raw'"
-        >
-          <i class="fas fa-pen mr-1"></i>
-            Edit raw
-        </button>
-        <button
-          type="button"
-          class="close ml-2"
-          aria-label="Close"
-          @click="$emit('close')"
-        >
-          <span aria-hidden="true"><i class="fas fa-times small"></i></span>
-        </button>
-      </div>
+        v-if="editable && !edit_mode"
+        class="btn btn-sm btn-outline-warning"
+        @click="edit_mode = edit_mode ? false : 'form'"
+      >
+        <i class="fas fa-pen mr-1"></i>
+        Edit
+      </button>
+      <button
+        type="button"
+        class="close ml-2"
+        aria-label="Close"
+        @click="$emit('close')"
+      >
+        <span aria-hidden="true"><i class="fas fa-times small"></i></span>
+      </button>
     </div>
+  </div>
     <h5 class="card-title text-truncate">
       {{ cityobject_id }}
     </h5>
@@ -155,25 +146,34 @@
           v-model="jsonString"
           class="form-control"
         ></textarea>
-        <div class="d-flex justify-content-end mt-2">
-          <button
-            type="button"
-            class="btn btn-success btn-sm"
-            @click="saveChanges"
-          >
-            <i class="fas fa-save mr-1"></i> Save
-          </button>
-        </div>
       </div>
       <div v-if="edit_mode=='form'">
         <HistoricalCityObjectEditor
           :geomFeatures='geomFeatures'
           @geomFeatures-updated="geomFeaturesUpdate"
         ></HistoricalCityObjectEditor>
+      </div>
+      <div v-show="edit_mode">
         <div class="d-flex justify-content-end mt-2">
           <button
+            v-if="edit_mode =='form'"
+            class="btn btn-sm btn-danger ml-1"
+            @click="edit_mode = 'raw'"
+          >
+            <i class="fas fa-pen mr-1"></i>
+              Edit raw
+          </button>
+          <button
+            v-if="edit_mode"
+            class="btn btn-sm btn-warning ml-1"
+            @click="edit_mode = edit_mode ? false : 'form'"
+          >
+            <i class="fas fa-pen mr-1"></i>
+              Cancel edit
+          </button>
+          <button
             type="button"
-            class="btn btn-success btn-sm"
+            class="btn btn-success btn-sm ml-1"
             @click="saveChanges"
           >
             <i class="fas fa-save mr-1"></i> Save
