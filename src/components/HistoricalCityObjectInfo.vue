@@ -161,7 +161,7 @@
             @click="edit_mode = 'raw'"
           >
             <i class="fas fa-pen mr-1"></i>
-              Edit raw
+            Edit raw
           </button>
           <button
             v-if="edit_mode"
@@ -169,7 +169,7 @@
             @click="edit_mode = edit_mode ? false : 'form'"
           >
             <i class="fas fa-times mr-1"></i>
-              Cancel edit
+            Cancel
           </button>
           <button
             type="button"
