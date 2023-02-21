@@ -174,7 +174,7 @@
           <button
             type="button"
             class="btn btn-success btn-sm ml-1"
-            @click="saveChanges"
+            @click="saveChanges($event)"
           >
             <i class="fas fa-save mr-1"></i>
             Save
@@ -223,6 +223,7 @@ export default {
 		return {
 			edit_mode: false,
 			expanded: 0,
+      geomFeaturesLastUpdate: null
 		};
 
 	},
@@ -391,15 +392,24 @@ export default {
 		},
     geomFeaturesUpdate(geomFeatures){
       console.log("geomFeaturesUpdate() geomFeatures", geomFeatures)
+      this.geomFeaturesLastUpdate = geomFeatures
     },
 		saveChanges() {
-
-			const card_id = $.escapeSelector( this.cityobject_id );
-			const new_json = document.querySelector( `#${card_id} #json_data` ).value;
-			const new_cityobject = JSON.parse( new_json );
-
-			this.$emit( "input", new_cityobject );
-
+      
+      if(this.edit_mode==="form"){
+        if(this.geomFeaturesLastUpdate !== null){
+          const new_cityobject = {...this.cityobject}
+          new_cityobject.attributes = {...this.cityobject.attributes}
+          new_cityobject.attributes.geomFeatures = {...this.cityobject.attributes.geomFeatures}
+          this.$emit( "geomFeatures-update", new_cityobject );
+        }
+      }
+      else if(this.edit_mode==="raw"){
+        const card_id = $.escapeSelector( this.cityobject_id );
+        const new_json = document.querySelector( `#${card_id} #json_data` ).value;
+        const new_cityobject = JSON.parse( new_json );
+        this.$emit( "geomFeatures-update", new_cityobject );
+      }
 		},
 		getIconStyle( cityobj, with_colours ) {
 
