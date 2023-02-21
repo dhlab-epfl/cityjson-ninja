@@ -37,7 +37,7 @@
   border-left: 2px solid #efefef;
 }
 .historical-city-json-editor .schema-based-json-editor--card:hover {
-  border-left: 2px solid #99caff; /*#bbeff7;*/
+  border-left: 2px solid #cce5ff /*#99caff; /*#bbeff7;*/
 }
 
 

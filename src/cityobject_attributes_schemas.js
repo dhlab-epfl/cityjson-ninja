@@ -240,7 +240,6 @@ export const roofSchema = {
     "parameters": {
       "title": "Roof Parameters",
       "type": "object",
-      "collapsed": true,
       "className": SUB_GEOM_FEATURE_HTML_CLASS,
       "properties": {
         "slope": {
