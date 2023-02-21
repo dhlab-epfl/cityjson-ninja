@@ -1,12 +1,10 @@
 <template>
   <div>
       <json-editor
-        v-for="geomFeature in supportedGeomFeatures"
-        :key="geomFeature"
         class="historical-city-json-editor"
-        :schema="schemas[geomFeature]"
-        :initial-value='cityobject["attributes"]["geomFeatures"][geomFeature]'
-        @update-value="($event)=>updateGeomFeature(geomFeature, $event)"
+        :schema="schema"
+        :initial-value='cityobject["attributes"]["geomFeatures"]'
+        @update-value="updateGeomFeature($event)"
         theme="bootstrap3"
         icon="fontawesome4"
         noSelect2
@@ -29,23 +27,40 @@
   /* correct weird -15px margins */
   margin-left: 0px;
   margin-right: 0px;
-  padding-left: 1em;
   display: flex;
   flex-direction: column;
+  /*padding-left: 1em;
+  border-left: 2px solid #efefef;*/
+}
+.historical-city-json-editor .schema-based-json-editor--card {
+  padding-left: 1em;
   border-left: 2px solid #efefef;
 }
 
 
 .historical-city-json-editor h3{
   font-size: 1.2em;
+  margin: 0px;
   /*color: red;*/
 }
 
-.sub-object-editor h3{
+.geom-feature-editor h3{
   font-size: 1em;
   /*color: red;*/
 }
-.sub-object-editor h3 .schema-based-json-editor--checkbox{
+.geom-feature-editor .schema-based-json-editor--card:hover {
+  border-left: 2px solid #99caff; /*#bbeff7;*/
+}
+
+.geom-feature-editor input{
+  font-size: 1em;
+  /*color: red;*/
+}
+.sub-geom-feature-editor h3{
+  font-size: 0.9em;
+  /*color: red;*/
+}
+.sub-geom-feature-editor h3 .schema-based-json-editor--checkbox{
   font-size: 0.8em;
   /*color: pink;*/
 }
@@ -79,11 +94,11 @@ export default {
 		return {
 			edit_mode: false,
 			expanded: 0,
-      schemas: {},
+      schema: cas.geomFeatureSchema,
       initialValue: cas.roofDefaultValue,
-      supportedGeomFeatures: [],
-      unsupportedGeomFeatures: [], // unused.
-      latestUpdates: {} // per geomFeature: last updated version
+      //supportedGeomFeatures: [],
+      //unsupportedGeomFeatures: [], // unused.
+      latestUpdate: {} // per geomFeature: last updated version
 		};
 
 	},
@@ -101,48 +116,32 @@ export default {
       }
     },
     saveChanges(){
-      Object.keys(this.latestUpdates).map(geomFeature=>{
-        if(this.latestUpdates[geomFeature]!==undefined && this.latestUpdates[geomFeature]!==null){
-          this.cityobject["attributes"]["geomFeatures"][geomFeature] = {...this.latestUpdates[geomFeature]}
-          this.latestUpdates[geomFeature] = undefined
+      if(this.latestUpdate!==null){
+          this.cityobject["attributes"]["geomFeatures"] = {...this.latestUpdate}
+          this.latestUpdate = null
           this.$emit( "cityobject_updated", this.cityobject );
-        }
-      })
+      }
     },
     hasUnsavedChanges(){
-      return Object.keys(this.latestUpdates).filter(k=> k!== undefined && k!==null).length>0
+      return this.latestUpdate !== null
     }
 	},
 	methods: {
-    updateGeomFeature(geomFeature, event){
-      console.log("updateExample geomFeature:", geomFeature, ", event", event)
-      if(this.latestUpdates[geomFeature]===null){
-        this.latestUpdates[geomFeature] = undefined
-      } else if(
-        this.latestUpdates[geomFeature]===undefined &&
-        event.isValid
-      ){
-        this.latestUpdates[geomFeature] = event.value
+    updateGeomFeature(event){
+      console.log("updateExample event", event)
+      if(event.isValid){
+        this.latestUpdate = event.value
       }
     },
     resetSavesAndUpdates(){
-      const geomFeatures = this.existingGeomFeatures
       // supportedGeomFeatures in correct order
-      this.supportedGeomFeatures = Object.keys(cas.schemas).filter(gf=>geomFeatures.includes(gf))
-      this.unsupportedGeomFeatures = geomFeatures.filter(gf=>cas.schemas[gf])
+      //const geomFeatures = this.existingGeomFeatures
+      //this.supportedGeomFeatures = Object.keys(cas.schemas).filter(gf=>geomFeatures.includes(gf))
+      //this.unsupportedGeomFeatures = geomFeatures.filter(gf=>cas.schemas[gf])
 
-      this.latestUpdates = {}
-      this.supportedGeomFeatures.forEach(sgf =>{
-        this.latestUpdates[sgf] = null
-      })
+      this.latestUpdate = null
     },
-    init(){
-      // init this.schemas
-      this.schemas = {}
-      Object.keys(cas.schemas).forEach(schemaName =>{
-        this.schemas[schemaName] = {...cas.schemas[schemaName], collapsed: true}
-      })
-      console.log("init() this.supportedGeomFeatures", this.supportedGeomFeatures)
+    init(){ 
       this.resetSavesAndUpdates()
     },
     reset(){

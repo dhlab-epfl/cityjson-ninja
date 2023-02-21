@@ -1,5 +1,6 @@
 
-export const SUB_OBJECT_HTML_CLASS="sub-object-editor"
+export const GEOM_FEATURE_HTML_CLASS="geom-feature-editor"
+export const SUB_GEOM_FEATURE_HTML_CLASS="sub-geom-feature-editor"
 
 export const metadataDefaultValue = {
   "uncertainty": 1,
@@ -9,7 +10,7 @@ export const metadataDefaultValue = {
 export const metadataSchema = {
   "title": "Metadata",
   "type": "object",
-  "className": SUB_OBJECT_HTML_CLASS,
+  "className": SUB_GEOM_FEATURE_HTML_CLASS,
   //"description": "a description example",
   "properties": {
     "uncertainty": {
@@ -50,7 +51,7 @@ export const paradataDefaultValue = {
 export const paradataSchema = {
   "title": "Paradata",
   "type": "object",
-  "className": SUB_OBJECT_HTML_CLASS,
+  "className": SUB_GEOM_FEATURE_HTML_CLASS,
   //"description": "a description example",
   "properties": {
     "author": {
@@ -88,6 +89,7 @@ export const heightDefaultValue = {
 export const heightSchema = {
   "title": "Height",
     "type": "object",
+    "className": GEOM_FEATURE_HTML_CLASS,
     //"description": "a description example",
     "properties": {
       "value": {
@@ -115,6 +117,7 @@ export const floorHeightDefaultValue = {
 export const floorHeightSchema = {
   "title": "Floor height",
     "type": "object",
+    "className": GEOM_FEATURE_HTML_CLASS,
     //"description": "a description example",
     "properties": {
       "value": {
@@ -142,6 +145,7 @@ export const numberOfFloorsDefaultValue = {
 export const numberOfFloorsSchema = {
   "title": "Number of floors",
     "type": "object",
+    "className": GEOM_FEATURE_HTML_CLASS,
     //"description": "a description example",
     "properties": {
       "value": {
@@ -213,12 +217,13 @@ export const roofDefaultValue ={
 export const roofSchema = {
   "title": "Roof",
   "type": "object",
+  "className": GEOM_FEATURE_HTML_CLASS,
   //"description": "a description example",
   "properties": {
     "type": {
       "title": "Roof type",
       "type": "object",
-      "className": SUB_OBJECT_HTML_CLASS,
+      "className": SUB_GEOM_FEATURE_HTML_CLASS,
       "properties": {
         "value": {
           "title": "Value",
@@ -236,13 +241,13 @@ export const roofSchema = {
       "title": "Roof Parameters",
       "type": "object",
       "collapsed": true,
-      "className": SUB_OBJECT_HTML_CLASS,
+      "className": SUB_GEOM_FEATURE_HTML_CLASS,
       "properties": {
         "slope": {
           "title": "Roof slope",
           "type": "object",
           "collapsed": true,
-          "className": SUB_OBJECT_HTML_CLASS,
+          "className": SUB_GEOM_FEATURE_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
@@ -258,7 +263,7 @@ export const roofSchema = {
           "title": "Upper floor thickness",
           "type": "object",
           "collapsed": true,
-          "className": SUB_OBJECT_HTML_CLASS,
+          "className": SUB_GEOM_FEATURE_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
@@ -274,7 +279,7 @@ export const roofSchema = {
           "title": "Eaves Overhang",
           "type": "object",
           "collapsed": true,
-          "className": SUB_OBJECT_HTML_CLASS,
+          "className": SUB_GEOM_FEATURE_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
@@ -291,7 +296,7 @@ export const roofSchema = {
           "title": "Base floor thickness",
           "type": "object",
           "collapsed": true,
-          "className": SUB_OBJECT_HTML_CLASS,
+          "className": SUB_GEOM_FEATURE_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
@@ -307,7 +312,7 @@ export const roofSchema = {
           "title": "Railing height",
           "type": "object",
           "collapsed": true,
-          "className": SUB_OBJECT_HTML_CLASS,
+          "className": SUB_GEOM_FEATURE_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
@@ -323,7 +328,7 @@ export const roofSchema = {
           "title": "Railing width",
           "type": "object",
           "collapsed": true,
-          "className": SUB_OBJECT_HTML_CLASS,
+          "className": SUB_GEOM_FEATURE_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
@@ -352,6 +357,20 @@ export const schemas = {
   paradata: paradataSchema,
 }
 export default schemas
+
+export const geomFeatureSchema = {
+  "type": "object",
+  "title": "Geometric Features",
+  "properties": {
+    height: {...heightSchema, collapsed: true},
+    numberOfFloors: {...numberOfFloorsSchema, collapsed: true},
+    floorHeight: {...floorHeightSchema, collapsed: true},
+    roof: {...roofSchema, collapsed: true},
+    //metadata: {...metadataSchema, collapsed: true},
+    //paradata: {...paradataSchema, collapsed: true},
+  },
+  required: ["height", "numberOfFloors", "floorHeight", "roof"]
+}
 
 const compleetestSchema = {
     "type": "object",
