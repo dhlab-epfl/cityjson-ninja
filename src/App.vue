@@ -303,18 +303,28 @@
               class="col-auto m-2"
               style="position: absolute; z-index: 1"
             >
-              <HistoricalCityObjectCard
+              <div
                 v-if="existsSelected"
-                :citymodel="activeCityModel"
-                :cityobject="activeCityModel.CityObjects[selected_objid]"
-                :cityobject_id="selected_objid"
-                :geometry-id="selectedGeometryId"
-                :boundary-id="selectedBoundaryId"
-                :expanded="0"
-                :editable="true"
-                @input="activeCityModel.CityObjects[selected_objid] = $event"
-                @close="selected_objid = null"
-              ></HistoricalCityObjectCard>
+                :id="selected_objid? selected_objid: ''"
+                class="card mb-2"
+                :class="{ 'border-primary' : false }"
+              >
+                <div
+                  class="card-body"
+                  style="overflow: auto; max-height: 600px"
+                >
+                <HistoricalCityObjectInfo
+                  :citymodel="activeCityModel"
+                  :cityobject="activeCityModel.CityObjects[selected_objid]"
+                  :cityobject_id="selected_objid"
+                  :geometry-id="selectedGeometryId"
+                  :boundary-id="selectedBoundaryId"
+                  :editable="true"
+                  @input="updateGeomFeatures($event)"
+                  @close="selected_objid = null"
+                ></HistoricalCityObjectInfo>
+              </div>
+            </div>
             </div>
             <ThreeJsViewer
               ref="viewer"
@@ -467,7 +477,7 @@ import VersionList from './components/Versioning/VersionList.vue';
 import HcjApiConsumer from "./HcjApiConsumer.js";
 import CityJSONsList from './components/CityJSONsList.vue';
 import UploadCityJSON from './components/UploadCityJSON.vue';
-import HistoricalCityObjectCard from './components/HistoricalCityObjectCard.vue';
+import HistoricalCityObjectInfo from './components/HistoricalCityObjectInfo.vue';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -483,7 +493,7 @@ export default {
 		VersionList,
     CityJSONsList,
     UploadCityJSON,
-    HistoricalCityObjectCard
+    HistoricalCityObjectInfo
 	},
 	data: function () {
 
@@ -780,6 +790,10 @@ export default {
       this.updateCityModel(this.citymodel_id).then(()=>{
         return this.getCityModel(this.citymodel_id)
       })
+    },
+    updateGeomFeatures(event){
+      console.log("App.updateGeomFeatures() event:", event)
+      //this.activeCityModel.CityObjects[selected_objid] = $event
     }
 	},
   mounted(){
