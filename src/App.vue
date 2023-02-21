@@ -689,13 +689,13 @@ export default {
 				this.selectedGeometryId = ids[ 1 ];
 				this.selectedBoundaryId = ids[ 2 ];
 
-			} else {
+			}/* else {
 
 				this.selected_objid = null;
 				this.selectedGeometryId = - 1;
 				this.selectedBoundaryId = - 1;
 
-			}
+			}*/
 
 		},
 		reset() {
