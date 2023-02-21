@@ -164,10 +164,11 @@
             <i class="fas fa-save mr-1"></i> Save
           </button>
         </div>
-      </div><div v-show="edit_mode=='form'">
+      </div>
+        <div v-if="edit_mode=='form'">
         <HistoricalCityObjectEditor
-          :cityobject="cityobject"
-		      :cityobject_id="cityobject_id"
+          :geomFeatures='geomFeatures'
+          @geomFeatures-updated="geomFeaturesUpdate"
         />
         <div class="d-flex justify-content-end mt-2">
           <button
@@ -247,6 +248,13 @@ export default {
 				     || Object.keys( this.surface ).length > 0;
 
 		},
+		hasGeomFeatures() {
+      return ( "attributes" in this.cityobject && this.attributesCount > 0 ) &&
+        "geomFeatures" in this.cityobject
+    },
+		geomFeatures() {
+      return this.hasGeomFeatures? this.cityobject["attributes"]["geomFeatures"] : {}
+    },
 		surface: function () {
 
 			if ( this.cityobject.geometry === undefined ) {
@@ -380,6 +388,9 @@ export default {
 			}
 
 		},
+    geomFeaturesUpdate(geomFeatures){
+      console.log("geomFeaturesUpdate() geomFeatures", geomFeatures)
+    },
 		saveChanges() {
 
 			const card_id = $.escapeSelector( this.cityobject_id );

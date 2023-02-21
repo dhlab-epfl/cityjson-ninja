@@ -3,7 +3,7 @@
       <json-editor
         class="historical-city-json-editor"
         :schema="schema"
-        :initial-value='cityobject["attributes"]["geomFeatures"]'
+        :initial-value='geomFeatures'
         @update-value="updateGeomFeature($event)"
         theme="bootstrap3"
         icon="fontawesome4"
@@ -84,11 +84,10 @@ export default {
 	name: "HistoricalCityObjectEditor",
 	components: {},
 	props: {
-		cityobject: Object,
-		cityobject_id: String,
+		geomFeatures: Object
 	},
   emits: [
-    "cityobject_updated" // sends new version of the cityobject
+    "geomFeatures-updated" // sends new version of the geomFeatures
   ],
 	data() {
 		return {
@@ -105,21 +104,12 @@ export default {
 	computed: {
     existingGeomFeatures(){
       if(
-        typeof this.cityobject["attributes"] === 'object' &&
-        this.cityobject["attributes"] !== null &&
-        typeof this.cityobject["attributes"]["geomFeatures"] === 'object' &&
-        this.cityobject["attributes"]["geomFeatures"] !== null
+        typeof this.geomFeatures === 'object' &&
+        this.geomFeatures !== null
       ){
-        return Object.keys(this.cityobject["attributes"]["geomFeatures"])
+        return Object.keys(this.geomFeatures)
       }else{
         return []
-      }
-    },
-    saveChanges(){
-      if(this.latestUpdate!==null){
-          this.cityobject["attributes"]["geomFeatures"] = {...this.latestUpdate}
-          this.latestUpdate = null
-          this.$emit( "cityobject_updated", this.cityobject );
       }
     },
     hasUnsavedChanges(){
@@ -131,6 +121,8 @@ export default {
       console.log("updateExample event", event)
       if(event.isValid){
         this.latestUpdate = event.value
+
+        this.$emit( "geomFeatures-updated", this.latestUpdate );
       }
     },
     resetSavesAndUpdates(){
@@ -149,7 +141,7 @@ export default {
     }
 	},
   watch: {
-    cityobject(){
+    geomFeatures(){
       this.reset()
     }
   },
