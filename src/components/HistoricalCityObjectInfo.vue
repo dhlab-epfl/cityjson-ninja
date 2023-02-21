@@ -168,7 +168,7 @@
             class="btn btn-sm btn-warning ml-1"
             @click="edit_mode = edit_mode ? false : 'form'"
           >
-            <i class="fas fa-pen mr-1"></i>
+            <i class="fas fa-times mr-1"></i>
               Cancel edit
           </button>
           <button
@@ -176,7 +176,8 @@
             class="btn btn-success btn-sm ml-1"
             @click="saveChanges"
           >
-            <i class="fas fa-save mr-1"></i> Save
+            <i class="fas fa-save mr-1"></i>
+            Save
           </button>
         </div>
       </div>
