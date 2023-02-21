@@ -95,7 +95,6 @@ export default {
       schema: cas.geomFeatureSchema,
       //supportedGeomFeatures: [],
       //unsupportedGeomFeatures: [], // unused.
-      latestUpdate: {} // per geomFeature: last updated version
 		};
 
 	},
@@ -109,43 +108,14 @@ export default {
       }else{
         return []
       }
-    },
-    hasUnsavedChanges(){
-      return this.latestUpdate !== null
     }
 	},
 	methods: {
     updateGeomFeature(event){
-      console.log("updateExample event", event)
       if(event.isValid){
-        this.latestUpdate = event.value
-
-        this.$emit( "geomFeatures-updated", this.latestUpdate );
+        this.$emit( "geomFeatures-updated", event.value );
       }
     },
-    resetSavesAndUpdates(){
-      // supportedGeomFeatures in correct order
-      //const geomFeatures = this.existingGeomFeatures
-      //this.supportedGeomFeatures = Object.keys(cas.schemas).filter(gf=>geomFeatures.includes(gf))
-      //this.unsupportedGeomFeatures = geomFeatures.filter(gf=>cas.schemas[gf])
-
-      this.latestUpdate = null
-    },
-    init(){ 
-      this.resetSavesAndUpdates()
-    },
-    reset(){
-      console.log("HistoricalCityObjectEditor.reset()")
-      this.resetSavesAndUpdates()
-    }
-	},
-  watch: {
-    geomFeatures(){
-      this.reset()
-    }
-  },
-  mounted(){    
-    this.init()
-  }
+	}
 };
 </script>
