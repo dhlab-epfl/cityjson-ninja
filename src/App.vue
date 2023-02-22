@@ -320,7 +320,7 @@
                   :geometry-id="selectedGeometryId"
                   :boundary-id="selectedBoundaryId"
                   :editable="true"
-                  @geomFeatures-update="updateGeomFeatures($event)"
+                  @geomFeatures-update="updateCityObject($event)"
                   @close="selected_objid = null"
                 ></HistoricalCityObjectInfo>
               </div>
@@ -552,7 +552,8 @@ export default {
 			highlightSurface: false,
 			availableLoDs: [],
 			activeLoD: - 1,
-			cameraLight: false
+			cameraLight: false,
+      cityobjectsToRemodel: []
 		};
 
 	},
@@ -791,9 +792,9 @@ export default {
         return this.getCityModel(this.citymodel_id)
       })
     },
-    updateGeomFeatures(event){
-      console.log("App.updateGeomFeatures() event:", event)
-      //this.activeCityModel.CityObjects[selected_objid] = $event
+    updateCityObject({cityobject_id, new_cityobject}){
+      console.log("App.updateCityObject() cityobject_id: ", cityobject_id, " new_cityobject: ", new_cityobject)
+      this.activeCityModel.CityObjects[cityobject_id] = new_cityobject
     }
 	},
   mounted(){

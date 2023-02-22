@@ -401,14 +401,14 @@ export default {
           const new_cityobject = {...this.cityobject}
           new_cityobject.attributes = {...this.cityobject.attributes}
           new_cityobject.attributes.geomFeatures = {...this.cityobject.attributes.geomFeatures}
-          this.$emit( "geomFeatures-update", new_cityobject );
+          this.$emit( "geomFeatures-update", {cityobject_id, new_cityobject} );
         }
       }
       else if(this.edit_mode==="raw"){
         const card_id = $.escapeSelector( this.cityobject_id );
         const new_json = document.querySelector( `#${card_id} #json_data` ).value;
         const new_cityobject = JSON.parse( new_json );
-        this.$emit( "geomFeatures-update", new_cityobject );
+        this.$emit( "geomFeatures-update", {cityobject_id, new_cityobject} );
       }
 		},
 		getIconStyle( cityobj, with_colours ) {
