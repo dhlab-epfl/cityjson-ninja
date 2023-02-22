@@ -255,7 +255,7 @@
                   >
                     <button
                       class="btn btn-warning col-auto"
-                      @click="updateModelEvent()"
+                      @click="remodelCityObjectsAndReload()"
                     >
                       <i class="fas fa-redo mr-1"></i> Update modelling
                     </button>
@@ -320,7 +320,7 @@
                   :geometry-id="selectedGeometryId"
                   :boundary-id="selectedBoundaryId"
                   :editable="true"
-                  @geomFeatures-update="updateCityObject($event)"
+                  @geomFeatures-update="saveCityObject($event)"
                   @close="selected_objid = null"
                 ></HistoricalCityObjectInfo>
               </div>
@@ -650,11 +650,26 @@ export default {
         this.catch_api_error("postCityModel", this.api.cityjsonUrl(cityjson_id), e)
       )
     },
-    updateCityModel(cityjson_id) {
+    postCityObject(cityjson_id, cityobject_id, cityobject) {
+      return this.api.postCityObject(cityjson_id, cityobject_id, cityobject).catch(e =>
+        this.catch_api_error("postCityObject", this.api.cityobjectUrl(cityobject_id), e)
+      )
+    },
+    updateCityModelling(cityjson_id) {
       this.loading = true
       return this.api.updateCityJsonModelling(cityjson_id).catch(e =>
-        this.catch_api_error("updateCityModel", this.api.cityjsonUpdateUrl(cityjson_id), e)
+        this.catch_api_error("updateCityModelling", this.api.cityjsonUpdateUrl(cityjson_id), e)
       ).then(()=>{
+        this.loading = false
+      })
+    },
+    updateCityObjectsModelling(cityjson_id, cityobject_ids) {
+      this.loading = true
+      console.log("App.updateCityObjectsModelling() cityobject_ids:", cityobject_ids)
+      return Promise.all(cityobject_ids.map(cityobject_id=>this.api.updateCityObjectModelling(cityjson_id, cityobject_id))).catch(e =>
+        this.catch_api_error("updateCityObjectModelling", this.api.cityobjectUpdateUrl(cityjson_id), e)
+      ).then(()=>{
+        console.log("App.updateCityObjectsModelling() DONE!")
         this.loading = false
       })
     },
@@ -787,14 +802,21 @@ export default {
 			this.download( "citymodel.json", text );
 
 		},
-    updateModelEvent(){
-      this.updateCityModel(this.citymodel_id).then(()=>{
-        return this.getCityModel(this.citymodel_id)
-      })
+    remodelCityModelAndReload(){
+      return this.updateCityModelling(this.citymodel_id).then(()=>
+        this.getCityModel(this.citymodel_id)
+      )
     },
-    updateCityObject({cityobject_id, new_cityobject}){
-      console.log("App.updateCityObject() cityobject_id: ", cityobject_id, " new_cityobject: ", new_cityobject)
+    remodelCityObjectsAndReload(){
+      return this.updateCityObjectsModelling(this.citymodel_id, this.cityobjectsToRemodel).then(()=>
+        this.getCityModel(this.citymodel_id)
+      )
+    },
+    saveCityObject({cityobject_id, new_cityobject}){
+      console.log("App.saveCityObject() cityobject_id: ", cityobject_id, " new_cityobject: ", new_cityobject)
       this.activeCityModel.CityObjects[cityobject_id] = new_cityobject
+      this.postCityObject(this.citymodel_id, cityobject_id, new_cityobject)
+      return this.cityobjectsToRemodel.push(cityobject_id)
     }
 	},
   mounted(){
