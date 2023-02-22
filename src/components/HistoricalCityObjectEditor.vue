@@ -2,6 +2,7 @@
   <div>
       <json-editor
         class="historical-city-json-editor"
+        :key="cityobject_id"
         :schema="schema"
         :initial-value='geomFeatures'
         @update-value="updateGeomFeature($event)"
@@ -84,6 +85,7 @@ export default {
 	name: "HistoricalCityObjectEditor",
 	components: {},
 	props: {
+    cityobject_id: String,
 		geomFeatures: Object
 	},
   emits: [

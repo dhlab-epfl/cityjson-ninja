@@ -149,6 +149,7 @@
       </div>
       <div v-if="edit_mode=='form'">
         <HistoricalCityObjectEditor
+          :cityobject_id="cityobject_id"
           :geomFeatures='geomFeatures'
           @geomFeatures-updated="geomFeaturesUpdate"
         ></HistoricalCityObjectEditor>
