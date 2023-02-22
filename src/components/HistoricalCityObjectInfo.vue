@@ -157,7 +157,7 @@
         <div class="d-flex justify-content-end mt-2">
           <button
             v-if="edit_mode =='form'"
-            class="btn btn-sm btn-danger ml-1"
+            class="btn btn-sm btn-outline-danger ml-1"
             @click="edit_mode = 'raw'"
           >
             <i class="fas fa-pen mr-1"></i>
@@ -165,7 +165,7 @@
           </button>
           <button
             v-if="edit_mode"
-            class="btn btn-sm btn-warning ml-1"
+            class="btn btn-sm btn-outline-warning ml-1"
             @click="edit_mode = edit_mode ? false : 'form'"
           >
             <i class="fas fa-times mr-1"></i>
