@@ -252,7 +252,7 @@ export default {
 		},
 		hasGeomFeatures() {
       return ( "attributes" in this.cityobject && this.attributesCount > 0 ) &&
-        "geomFeatures" in this.cityobject
+        "geomFeatures" in this.cityobject["attributes"]
     },
 		geomFeatures() {
       return this.hasGeomFeatures? this.cityobject["attributes"]["geomFeatures"] : {}
@@ -399,7 +399,7 @@ export default {
         if(this.geomFeaturesLastUpdate !== null){
           const new_cityobject = {...this.cityobject}
           new_cityobject.attributes = {...this.cityobject.attributes}
-          new_cityobject.attributes.geomFeatures = {...this.cityobject.attributes.geomFeatures}
+          new_cityobject.attributes.geomFeatures = {...this.geomFeaturesLastUpdate}
           this.$emit( "geomFeatures-update", {cityobject_id: this.cityobject_id, new_cityobject} );
         }
       }
