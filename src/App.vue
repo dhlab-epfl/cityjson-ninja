@@ -481,7 +481,7 @@ import HistoricalCityObjectInfo from './components/HistoricalCityObjectInfo.vue'
 import $ from 'jquery';
 import _ from 'lodash';
 
-const apiUrl = "http://localhost:8080/v1"
+const apiUrl = process.env.VUE_APP_API_ENDPOINT //"http://localhost:8080/v1"
 const MESSAGE_TIMEOUT = 5000
 
 export default {
@@ -611,6 +611,9 @@ export default {
 		}
 	},
 	watch: {
+    apiUrl(){
+      this.api = new HcjApiConsumer(this.apiUrl)
+    }
 		/*selected_objid () {
 
 			if ( this.selected_objid != null ) {
