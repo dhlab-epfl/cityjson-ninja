@@ -14,3 +14,5 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
+#docker build -t local/ninja2 .
+#docker run -v 3181:80 local/ninja2

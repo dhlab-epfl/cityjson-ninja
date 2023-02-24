@@ -1,0 +1,18 @@
+# from https://v2.vuejs.org/v2/cookbook/dockerize-vuejs-app.html?redirect=true
+# build stage
+FROM node:12 as build-stage
+WORKDIR /app
+
+
+COPY package*.json ./
+COPY yarn.lock ./
+RUN yarn install
+# add `/app/node_modules/.bin` to $PATH
+#ENV PATH /app/node_modules/.bin:$PATH
+
+ENTRYPOINT ["yarn", "run", "dev"]
+
+
+
+# docker build  -f 'Dockerfile.code_hot_loading' -t local/ninja2-hot-loading .
+# docker run -it --rm -v ${PWD}:/app -p 3001:9080 local/ninja2-hot-loading
