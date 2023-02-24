@@ -7,12 +7,19 @@ WORKDIR /app
 COPY package*.json ./
 COPY yarn.lock ./
 RUN yarn install
-# add `/app/node_modules/.bin` to $PATH
-#ENV PATH /app/node_modules/.bin:$PATH
+
+
+# if --build-arg IS_DOCKER_COMPOSE=1, set NODE_ENV to 'docker-compose', otherwise defaults to 'dev'
+# NODE_ENV is used by parcel-bundler to determin which ".env.XX" files to load
+# namely, we use it to load the ".env.docker-compose" file which has the dockerized api url
+ARG IS_DOCKER_COMPOSE=""
+#RUN echo "IS_DOCKER_COMPOSE: $IS_DOCKER_COMPOSE"
+ENV NODE_ENV=${IS_DOCKER_COMPOSE:+docker-compose}
+ENV NODE_ENV=${NODE_ENV:-dev}
 
 ENTRYPOINT ["yarn", "run", "dev"]
 
 
 
-# docker build  -f 'Dockerfile.code_hot_loading' -t local/ninja2-hot-loading .
-# docker run -it --rm -v ${PWD}:/app -p 3001:9080 local/ninja2-hot-loading
+# docker build  -f 'Dockerfile.code_hot_loading' -t hcj-frontend-hot-loading .
+# docker run -it --rm -v ${PWD}:/app -p 3001:9080 hcj-frontend-hot-loading
