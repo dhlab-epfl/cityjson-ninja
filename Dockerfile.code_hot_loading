@@ -6,7 +6,6 @@ WORKDIR /app
 
 COPY package*.json ./
 COPY yarn.lock ./
-RUN yarn install
 
 
 # if --build-arg IS_DOCKER_COMPOSE=1, set NODE_ENV to 'docker-compose', otherwise defaults to 'dev'
