@@ -410,6 +410,7 @@ export default {
         const new_cityobject = JSON.parse( new_json );
         this.$emit( "geomFeatures-update", {cityobject_id: this.cityobject_id, new_cityobject} );
       }
+      this.edit_mode=false
 		},
 		getIconStyle( cityobj, with_colours ) {
 

@@ -44,9 +44,14 @@ export default class HcjApiConsumer{
             return response
         });
     }
-    updateCityJsonModelling(cityjsonId){
+    updateCityJsonModelling(cityjsonId, cityobjectIds){
         return fetch(this.cityjsonUpdateUrl(cityjsonId), {
-            method: "post"
+            method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cityobjectIds)
         }).then( (response) => { 
             console.log("CJ UPDATE response", response)
             return response
