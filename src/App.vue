@@ -630,9 +630,10 @@ export default {
       return this.api.getCityJsonsList().then(cityModels=>{
         this.cityModels=cityModels
         //console.log("this.cityModels", this.cityModels)
-      }).catch(e =>
+      }).catch(e =>{
         this.catch_api_error("getCityModels", this.api.modelsUrl(), e)
-      )
+        throw e
+      })
     },
     getCityModel(cityjson_id){
       this.loading = true
@@ -641,45 +642,81 @@ export default {
 				this.citymodel = cityjson;
         this.citymodel_id = cityjson_id;
 				this.file_loaded = true;
-      }).catch(e =>
-        this.catch_api_error("getCityModel", this.api.cityjsonUrl(cityjson_id), e)
-      ).then(()=>{
+      }).then(()=>{
         this.loading = false
+      }).catch(e =>{
+        this.loading = false
+        this.catch_api_error("getCityModel", this.api.cityjsonUrl(cityjson_id), e)
+        throw e
       })
 			//this.loading = true;
     },
+    /**
+     * Post a citymodel to the backend.
+     * Inform the user if any error occurs.
+     */
     postCityModel(cityjson_id, cityjson) {
-      return this.api.postCityJson(cityjson_id, cityjson).catch(e =>
-        this.catch_api_error("postCityModel", this.api.cityjsonUrl(cityjson_id), e)
-      )
-    },
-    postCityObject(cityjson_id, cityobject_id, cityobject) {
-      return this.api.postCityObject(cityjson_id, cityobject_id, cityobject).catch(e =>
-        this.catch_api_error("postCityObject", this.api.cityobjectUrl(cityobject_id), e)
-      )
-    },
-    updateCityModelling(cityjson_id, cityobject_ids) {
       this.loading = true
-      return this.api.updateCityJsonModelling(cityjson_id).catch(e =>
-        this.catch_api_error("updateCityModelling", this.api.cityjsonUpdateUrl(cityjson_id, cityobject_ids), e)
-      ).then(()=>{
+      return this.api.postCityJson(cityjson_id, cityjson).then(()=>{
         this.loading = false
+      }).catch(e =>{
+        this.loading = false
+        this.catch_api_error("postCityModel", this.api.cityjsonUrl(cityjson_id), e)
       })
     },
+    /**
+     * Post a cityObject to the backend.
+     * Inform the user if any error occurs.
+     */
+    postCityObject(cityjson_id, cityobject_id, cityobject) {
+      return this.api.postCityObject(cityjson_id, cityobject_id, cityobject).catch(e =>{
+        this.catch_api_error("postCityObject", this.api.cityobjectUrl(cityobject_id), e)
+        throw e
+      })
+    },
+    /**
+     * Update a cityjson modelling using a list of cityobject_ids
+     * Inform the user if any error occurs.
+     * Show the loading wheel while the operation is ongoing.
+     */
+    updateCityModelling(cityjson_id) {
+      this.loading = true
+      return this.api.updateCityJsonModelling(cityjson_id
+      ).then(()=>{
+        this.loading = false
+      }).catch(e =>{
+        this.loading = false
+        this.catch_api_error("updateCityModelling", this.api.cityjsonUpdateUrl(cityjson_id), e)
+        throw e
+      })
+    },
+    /**
+     * Update a list of cityobject_ids modelling
+     * Inform the user if any error occurs.
+     * Show the loading wheel while the operation is ongoing.
+     */
     updateCityObjectsModelling(cityjson_id, cityobject_ids) {
       this.loading = true
       console.log("App.updateCityObjectsModelling() cityobject_ids:", cityobject_ids)
-      return Promise.all(cityobject_ids.map(cityobject_id=>this.api.updateCityObjectModelling(cityjson_id, cityobject_id))).catch(e =>
-        this.catch_api_error("updateCityObjectModelling", this.api.cityobjectUpdateUrl(cityjson_id), e)
+      return Promise.all(
+        cityobject_ids.map(cityobject_id=>this.api.updateCityObjectModelling(cityjson_id, cityobject_id))
       ).then(()=>{
         console.log("App.updateCityObjectsModelling() DONE!")
         this.loading = false
+      }).catch(e =>{
+        this.loading = false
+        this.catch_api_error("updateCityObjectModelling", this.api.cityobjectUpdateUrl(cityjson_id), e)
+        throw e
       })
     },
+    /**
+     * Delete a cityjson
+     * Inform the user if any error occurs.
+     */
     deleteCityModel(citymodel_id){
-      return this.api.deleteCityJson(citymodel_id).catch(e =>
+      return this.api.deleteCityJson(citymodel_id).catch(e =>{
         this.catch_api_error("getCityModels", this.api.modelsUrl(), e)
-      )
+      })
     },
     catch_api_error(method, url, error){
       const default_error_message = "App."+method+"() ERROR: "
@@ -767,9 +804,8 @@ export default {
 
     },
     modelUploaded([cityjson_id, cityjson]) {
-      // TODO send model to server
+      this.loading = false
       this.postCityModel(cityjson_id, cityjson).then(()=>{
-        this.loading = false
         return this.getCityModels()
       })
     },
@@ -805,9 +841,13 @@ export default {
 			this.download( "citymodel.json", text );
 
 		},
+    /**
+     * Remodel a cityjson and load the updated
+     * Inform the user if any error occurs.
+     */
     remodelCityModelAndReload(){
       console.log("App.remodelCityModelAndReload() pre-request cityobjectsToRemodel: ", this.cityobjectsToRemodel)
-      return this.updateCityModelling(this.citymodel_id, this.cityobjectsToRemodel).then(()=>{
+      return this.updateCityModelling(this.citymodel_id).then(()=>{
         this.cityobjectsToRemodel=[]
         console.log("App.remodelCityModelAndReload() post-request cityobjectsToRemodel: ", this.cityobjectsToRemodel)
         return this.getCityModel(this.citymodel_id)
@@ -821,7 +861,9 @@ export default {
     saveCityObject({cityobject_id, new_cityobject}){
       console.log("App.saveCityObject() cityobject_id: ", cityobject_id, " new_cityobject: ", new_cityobject)
       this.activeCityModel.CityObjects[cityobject_id] = new_cityobject
-      this.postCityObject(this.citymodel_id, cityobject_id, new_cityobject)
+      this.postCityObject(this.citymodel_id, cityobject_id, new_cityobject).then(()=>{
+        this.getCityModel(this.citymodel_id)
+      })
       console.log("App.saveCityObject() cityobjectsToRemodel: ", this.cityobjectsToRemodel)
       return this.cityobjectsToRemodel.push(cityobject_id)
     }
