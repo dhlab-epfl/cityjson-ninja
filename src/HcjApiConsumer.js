@@ -3,6 +3,11 @@ const CITYJSON_PATH="models"
 const CITYOBJECT_PATH="cityobjects"
 const UPDATE_PATH="update"
 
+/**
+ * HcjApiConsumer defines js functions to call the HistoricalCityJSON API.
+ * Each function returns the accompagnanying js Promise that will succeed or fail.
+ * It doesn't handle any frontend aspect (notifying the user of errors, showing the new cityjson, etc...)
+ */
 export default class HcjApiConsumer{
     constructor(baseurl){
         this.baseurl = baseurl
