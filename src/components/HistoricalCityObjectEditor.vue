@@ -4,8 +4,8 @@
         class="historical-city-json-editor"
         :key="cityobject_id"
         :schema="schema"
-        :initial-value='geomFeatures'
-        @update-value="updateGeomFeature($event)"
+        :initial-value='cityobjectAttributes'
+        @update-value="updateCityobjectAttributes($event)"
         theme="bootstrap3"
         icon="fontawesome4"
         noSelect2
@@ -48,20 +48,20 @@
   /*color: red;*/
 }
 
-.geom-feature-editor h3{
+.cityobject-attributes-editor h3{
   font-size: 1em;
   /*color: red;*/
 }
 
-.geom-feature-editor input{
+.cityobject-attributes-editor input{
   font-size: 1em;
   /*color: red;*/
 }
-.sub-geom-feature-editor h3{
+.sub-cityobject-attributes-editor h3{
   font-size: 0.9em;
   /*color: red;*/
 }
-.sub-geom-feature-editor h3 .schema-based-json-editor--checkbox{
+.sub-cityobject-attributes-editor h3 .schema-based-json-editor--checkbox{
   font-size: 0.8em;
   /*color: pink;*/
 }
@@ -86,36 +86,36 @@ export default {
 	components: {},
 	props: {
     cityobject_id: String,
-		geomFeatures: Object
+		cityobjectAttributes: Object
 	},
   emits: [
-    "geomFeatures-updated" // sends new version of the geomFeatures
+    "cityobject-attributes-update" // sends new version of the cityobjectAttributes
   ],
 	data() {
 		return {
 			edit_mode: false,
-      schema: cas.geomFeatureSchema,
-      //supportedGeomFeatures: [],
-      //unsupportedGeomFeatures: [], // unused.
+      schema: cas.cityobjectAttributesSchema,
+      //supportedCityobjectAttributes: [],
+      //unsupportedCityobjectAttributes: [], // unused.
 		};
 
 	},
 	computed: {
-    existingGeomFeatures(){
+    existingCityobjectAttributes(){
       if(
-        typeof this.geomFeatures === 'object' &&
-        this.geomFeatures !== null
+        typeof this.cityobjectAttributes === 'object' &&
+        this.cityobjectAttributes !== null
       ){
-        return Object.keys(this.geomFeatures)
+        return Object.keys(this.cityobjectAttributes)
       }else{
         return []
       }
     }
 	},
 	methods: {
-    updateGeomFeature(event){
+    updateCityobjectAttributes(event){
       if(event.isValid){
-        this.$emit( "geomFeatures-updated", event.value );
+        this.$emit( "cityobject-attributes-update", event.value );
       }
     },
 	}

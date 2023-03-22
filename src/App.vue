@@ -320,7 +320,7 @@
                   :geometry-id="selectedGeometryId"
                   :boundary-id="selectedBoundaryId"
                   :editable="true"
-                  @geomFeatures-update="saveCityObject($event)"
+                  @cityobject-attributes-update="saveCityObject($event)"
                   @close="selected_objid = null"
                 ></HistoricalCityObjectInfo>
               </div>

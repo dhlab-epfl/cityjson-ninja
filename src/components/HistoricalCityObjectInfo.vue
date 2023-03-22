@@ -150,8 +150,8 @@
       <div v-if="edit_mode=='form'">
         <HistoricalCityObjectEditor
           :cityobject_id="cityobject_id"
-          :geomFeatures='geomFeatures'
-          @geomFeatures-updated="geomFeaturesUpdate"
+          :cityobjectAttributes='cityobjectAttributes'
+          @cityobject-attributes-update="cityobjectAttributesUpdate"
         ></HistoricalCityObjectEditor>
       </div>
       <div v-show="edit_mode">
@@ -198,6 +198,9 @@ export default {
 	components: {
     HistoricalCityObjectEditor
   },
+  emits: [
+    "cityobject-attributes-update" // sends new version of the cityobjectAttributes
+  ],
 	props: {
 		citymodel: Object,
 		cityobject: Object,
@@ -224,7 +227,7 @@ export default {
 		return {
 			edit_mode: false,
 			expanded: 0,
-      geomFeaturesLastUpdate: null
+      cityobjectAttributesLastUpdate: null
 		};
 
 	},
@@ -251,12 +254,11 @@ export default {
 				     || Object.keys( this.surface ).length > 0;
 
 		},
-		hasGeomFeatures() {
-      return ( "attributes" in this.cityobject && this.attributesCount > 0 ) &&
-        "geomFeatures" in this.cityobject["attributes"]
+		hasCityobjectAttributes() {
+      return ( "attributes" in this.cityobject && this.attributesCount > 0 )
     },
-		geomFeatures() {
-      return this.hasGeomFeatures? this.cityobject["attributes"]["geomFeatures"] : {}
+		cityobjectAttributes() {
+      return this.hasCityobjectAttributes? this.cityobject["attributes"] : {}
     },
 		surface: function () {
 
@@ -391,24 +393,24 @@ export default {
 			}
 
 		},
-    geomFeaturesUpdate(geomFeatures){
-      console.log("geomFeaturesUpdate() geomFeatures", geomFeatures)
-      this.geomFeaturesLastUpdate = geomFeatures
+    cityobjectAttributesUpdate(cityobjectAttributes){
+      console.log("cityobjectAttributesUpdate() cityobjectAttributes", cityobjectAttributes)
+      this.cityobjectAttributesLastUpdate = cityobjectAttributes
     },
 		saveChanges() {
       if(this.edit_mode==="form"){
-        if(this.geomFeaturesLastUpdate !== null){
+        if(this.cityobjectAttributesLastUpdate !== null){
           const new_cityobject = {...this.cityobject}
           new_cityobject.attributes = {...this.cityobject.attributes}
-          new_cityobject.attributes.geomFeatures = {...this.geomFeaturesLastUpdate}
-          this.$emit( "geomFeatures-update", {cityobject_id: this.cityobject_id, new_cityobject} );
+          new_cityobject.attributes = {...this.cityobjectAttributesLastUpdate}
+          this.$emit( "cityobject-attributes-update", {cityobject_id: this.cityobject_id, new_cityobject} );
         }
       }
       else if(this.edit_mode==="raw"){
         const card_id = $.escapeSelector( this.cityobject_id );
         const new_json = document.querySelector( `#${card_id} #json_data` ).value;
         const new_cityobject = JSON.parse( new_json );
-        this.$emit( "geomFeatures-update", {cityobject_id: this.cityobject_id, new_cityobject} );
+        this.$emit( "cityobject-attributes-update", {cityobject_id: this.cityobject_id, new_cityobject} );
       }
       this.edit_mode=false
 		},
