@@ -509,6 +509,7 @@ export default {
 			selectedGeometryId: - 1,
 			selectedBoundaryId: - 1,
 			loading: false,
+      username: false,
 			error_message: null,
 			active_sidebar: 'objects', // objects/versions
 			has_versions: false,
@@ -668,8 +669,8 @@ export default {
      * Post a cityObject to the backend.
      * Inform the user if any error occurs.
      */
-    postCityObject(cityjson_id, cityobject_id, cityobject) {
-      return this.api.postCityObject(cityjson_id, cityobject_id, cityobject).catch(e =>{
+    postCityObject(cityjson_id, cityobject_id, cityobject, edit_author="missing_user", edit_message=false) {
+      return this.api.postCityObject(cityjson_id, cityobject_id, cityobject, edit_author, edit_message).catch(e =>{
         this.catch_api_error("postCityObject", this.api.cityobjectUrl(cityobject_id), e)
         throw e
       })
@@ -764,6 +765,12 @@ export default {
 			}*/
 
 		},
+    getUsername(){
+      if(!this.username){
+        this.username = window.prompt("Please enter your user name:")
+      }
+      return this.username
+    },
 		reset() {
 
 			this.citymodel = {};
@@ -859,13 +866,19 @@ export default {
       )
     },
     saveCityObject({cityobject_id, new_cityobject}){
-      console.log("App.saveCityObject() cityobject_id: ", cityobject_id, " new_cityobject: ", new_cityobject)
-      this.activeCityModel.CityObjects[cityobject_id] = new_cityobject
-      this.postCityObject(this.citymodel_id, cityobject_id, new_cityobject).then(()=>{
-        this.getCityModel(this.citymodel_id)
-      })
-      console.log("App.saveCityObject() cityobjectsToRemodel: ", this.cityobjectsToRemodel)
-      return this.cityobjectsToRemodel.push(cityobject_id)
+      const username = this.getUsername()
+      //console.log("App.saveCityObject() cityobject_id: ", cityobject_id, " new_cityobject: ", new_cityobject, ", username: ", username)
+      if(username){
+        window.prompt("Save message:", 'modified CityObject with id "'+cityobject_id+'"')
+        this.activeCityModel.CityObjects[cityobject_id] = new_cityobject
+        this.postCityObject(this.citymodel_id, cityobject_id, new_cityobject).then(()=>{
+          this.getCityModel(this.citymodel_id)
+        })
+        console.log("App.saveCityObject() cityobjectsToRemodel: ", this.cityobjectsToRemodel)
+        return this.cityobjectsToRemodel.push(cityobject_id)
+      }else{
+        this.alert_error("No username provided, save canceled.\nPlease provide a username to allow saving.")
+      }
     }
 	},
   mounted(){
