@@ -647,6 +647,7 @@ export default {
       this.loading = true
       this.api.getCityJson(cityjson_id).then(cityjson=>{
         //console.log("this.api.getCityJson(), cityjson_id: ", cityjson_id, " cityjson:", cityjson)
+        delete cityjson["geometry-templates"]
 				this.citymodel = cityjson;
         this.citymodel_id = cityjson_id;
 				this.file_loaded = true;
