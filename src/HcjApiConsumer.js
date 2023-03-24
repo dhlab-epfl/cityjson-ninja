@@ -73,14 +73,21 @@ export default class HcjApiConsumer{
     getCityObject(cityjsonId, cityobjectId){
         return fetch(this.cityobjectUrl(cityjsonId, cityobjectId)).then(response=>response.json())
     }
-    postCityObject(cityjsonId, cityobjectId, cityobject){
+    postCityObject(cityjsonId, cityobjectId, cityobject, edit_author="missing_user", edit_message=false){
+        if(!edit_message){
+          edit_message = 'default: modified CityObject with id "'+cityobjectId+'"'
+        }
         return fetch(this.cityobjectUrl(cityjsonId, cityobjectId), {
             method: "post",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(cityobject)
+            body: JSON.stringify({
+                edit_author,
+                edit_message,
+                "CityObject": cityobject
+            })
         }).then( (response) => { 
             console.log("CO POST response", response)
             return response
