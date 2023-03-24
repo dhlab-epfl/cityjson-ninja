@@ -216,7 +216,7 @@ export const roofTypeSchema = {
     "sources": {...sourcesSchema, "collapsed": true},
     "paradata": {...paradataSchema, "collapsed": true}
   },
-  required: ["value"]
+  required: ["value", "sources"]
 }
 
 export const roofSchema = {
@@ -248,7 +248,8 @@ export const roofSchema = {
             },
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
-          }
+          },
+          required: ["value", "sources"]
         },
         "upperFloorThickness": {
           "title": "Upper floor thickness",
@@ -268,6 +269,7 @@ export const roofSchema = {
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
+          required: ["value", "sources"]
         },
         "eavesOverhang": {
           "title": "Eaves Overhang",
@@ -287,6 +289,7 @@ export const roofSchema = {
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
+          required: ["value", "sources"]
         },
         // only for flat roof
         
@@ -308,6 +311,7 @@ export const roofSchema = {
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
+          required: ["value", "sources"]
         },
         "railingWidth": {
           "title": "Railing width",
