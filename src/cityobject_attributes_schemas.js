@@ -2,52 +2,41 @@
 export const CITYOBJECT_ATTRIBUTES_HTML_CLASS="cityobject-attributes-editor"
 export const SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS="sub-cityobject-attributes-editor"
 
-export const metadataDefaultValue = {
-  "uncertainty": 1,
-  "source": "",
-  "notes": ""
-}
-export const metadataSchema = {
-  "title": "Metadata",
-  "type": "object",
+
+
+/// sources schema done:
+export const sourcesSchema = {
+  "title": "Sources",
+  "type": "array",
   "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
   //"description": "a description example",
-  "properties": {
-    "uncertainty": {
-      "title": "Uncertainty",
-      "type": "number",
-      //"description": "a number description example",
-      "default": 1,
-      "minimum": 0,
-      "exclusiveMinimum": false,
-      "maximum": 1,
-      "exclusiveMaximum": false
-    },
-    "source": {
-      "title": "Source",
-      "type": "string",
-      //"description": "a string description example",
-      "default": "",
-    },
-    "notes": {
-      "title": "Notes",
-      "type": "string",
-      "format": "textarea",
-      //"description": "a string description example",
-      "default": "",
-    },
-  },
-  "required": [
-    "uncertainty",
-    "source"
-  ]
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name of the source",
+        "type": "string",
+        //"description": "a string description example",
+        "default": "",
+      },
+      "type": {
+        "title": "Type of the source",
+        "type": "select",
+        "enum": sourceTypes
+      },
+      "notes": {
+        "title": "Notes",
+        "type": "string",
+        "format": "textarea",
+        "default": ""
+        //"description": "a string description example",
+      },
+    }
+  }
 }
 
-export const paradataDefaultValue = {
-  "author": "",
-  "date": "",
-  "comments": ""
-}
+
+/// paradata schema done:
 export const paradataSchema = {
   "title": "Paradata",
   "type": "object",
@@ -74,6 +63,16 @@ export const paradataSchema = {
       //"description": "a string description example",
       "default": "",
     },
+    "uncertainty": {
+      "title": "Level of uncertainty",
+      "type": "select",
+      "enum": uncertaintyLevels,
+    },
+    "version": {
+      "title": "Version",
+      "type": "number",
+      "default": 0,
+    },
   },
   "required": [
     "author",
@@ -81,11 +80,7 @@ export const paradataSchema = {
   ]
 }
 
-export const heightDefaultValue = {
-  value: 1,
-  metadata: {},
-  paradata: {}
-}
+///done
 export const heightSchema = {
   "title": "Height",
     "type": "object",
@@ -96,24 +91,19 @@ export const heightSchema = {
         "title": "Value",
         "type": "number",
         //"description": "a number description example",
-        "default": 1,
-        "minimum": 1,
+        
+        "minimum": 0.2,
         "exclusiveMinimum": false,
-        "maximum": 1000,
+        "maximum": 200,
         "exclusiveMaximum": true
       },
-      "metadata": {...metadataSchema, "collapsed": true},
+      "sources": {...sourcesSchema, "collapsed": true},
       "paradata": {...paradataSchema, "collapsed": true}
     },
-    required: ["value"]
 }
 
 
-export const floorHeightDefaultValue = {
-  value: 1,
-  metadata: {},
-  paradata: {}
-}
+///done
 export const floorHeightSchema = {
   "title": "Floor height",
     "type": "object",
@@ -124,24 +114,18 @@ export const floorHeightSchema = {
         "title": "Value",
         "type": "number",
         //"description": "a number description example",
-        "default": 1,
-        "minimum": 1,
+        
+        "minimum": 0.2,
         "exclusiveMinimum": false,
-        "maximum": 500,
+        "maximum": 10,
         "exclusiveMaximum": true
       },
-      "metadata": {...metadataSchema, "collapsed": true},
+      "sources": {...sourcesSchema, "collapsed": true},
       "paradata": {...paradataSchema, "collapsed": true}
     },
-    required: ["value"]
 }
 
-
-export const numberOfFloorsDefaultValue = {
-  value: 1,
-  metadata: {},
-  paradata: {}
-}
+///done
 export const numberOfFloorsSchema = {
   "title": "Number of floors",
     "type": "object",
@@ -152,25 +136,38 @@ export const numberOfFloorsSchema = {
         "title": "Value",
         "type": "number",
         //"description": "a number description example",
-        "default": 1,
+        
         "minimum": 1,
         "exclusiveMinimum": false,
-        "maximum": 1000,
+        "maximum": 100,
         "exclusiveMaximum": true
       },
-      "metadata": {...metadataSchema, "collapsed": true},
+      "sources": {...sourcesSchema, "collapsed": true},
       "paradata": {...paradataSchema, "collapsed": true}
     },
-    required: ["value"]
 }
 
 
 
 
 
+/// done
+export const uncertaintyLevels = [
+  "low",
+  "medium",
+  "high"
+]
 
-
-
+/// done
+export const sourceTypes = [
+  "cartography",
+  "technical drawing",
+  "photo",
+  "perspective drawing",
+  "written document",
+  "random",
+  "inferred"
+]
 
 
 export const roofTypes = [
@@ -180,63 +177,55 @@ export const roofTypes = [
   "domed"
 ]
 
-export const roofDefaultValue ={
-  "type": {
-    "value": "gable",
-    "metadata": {
-      "source": "random['hip', 'gable', 'flat']"
-    }
+
+export const slopeSchema = {
+  "title": "Roof slope",
+  "type": "object",
+  "collapsed": true,
+  "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
+  "properties": {
+    "value": {
+      "title": "Value",
+      "type": "number",
+    },
+    "sources": {...sourcesSchema, "collapsed": true},
+    "paradata": {...paradataSchema, "collapsed": true}
   },
-  "parameters": {
-    "slope": {
-      "value": 0.409,
-      "metadata": {
-        "source": "random[0.3, 0.6]"
-      }
-    },
-    "upperFloorThickness": {
-      "value": 0.248,
-      "metadata": {
-        "source": "random[0.2, 0.3]"
-      }
-    },
-    "eavesOverhang": {
-      "value": 0.374,
-      "metadata": {
-        "source": "random[0.2, 0.4]"
-      }
-    },
-    "ids_gable": {
-      "value": null,
-      "metadata": {
-        "source": "automatic"
-      }
+  "rule": {
+    "effect": "HIDE",
+    "condition": {
+        "scope": "/properties/value",
+        "schema": { 
+          "enum": ["hip", "gable"]
+        }
     }
   }
 }
+
+export const roofTypeSchema = {
+  "title": "Roof type",
+  "type": "object",
+  "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
+  "properties": {
+    "value": {
+      "title": "Value",
+      "type": "string",
+      "format": "select",
+      "enum": roofTypes
+    },
+    "sources": {...sourcesSchema, "collapsed": true},
+    "paradata": {...paradataSchema, "collapsed": true}
+  },
+  required: ["value"]
+}
+
 export const roofSchema = {
   "title": "Roof",
   "type": "object",
   "className": CITYOBJECT_ATTRIBUTES_HTML_CLASS,
   //"description": "a description example",
   "properties": {
-    "type": {
-      "title": "Roof type",
-      "type": "object",
-      "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-      "properties": {
-        "value": {
-          "title": "Value",
-          "type": "string",
-          //"default": "hip",
-          "format": "select",
-          "enum": roofTypes
-        },
-        "metadata": {...metadataSchema, "collapsed": true},
-        "paradata": {...paradataSchema, "collapsed": true}
-      },
-      required: ["value"]
-    },
+    "type": roofTypeSchema,
     "parameters": {
       "title": "Roof Parameters",
       "type": "object",
@@ -245,104 +234,162 @@ export const roofSchema = {
         "slope": {
           "title": "Roof slope",
           "type": "object",
+          "requiredWhen": [
+            "slope",
+            "===",
+            "any"
+          ],
           "collapsed": true,
           "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
               "type": "number",
-              "default": 0.3,
             },
-            "metadata": {...metadataSchema, "collapsed": true},
+            "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
-          },
-          required: ["value"]
+          }
         },
         "upperFloorThickness": {
           "title": "Upper floor thickness",
           "type": "object",
           "collapsed": true,
+          "requiredWhen": [
+            "upperFloorThickness",
+            "===",
+            "any"
+          ],
           "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
               "type": "number",
-              "default": 0.2,
             },
-            "metadata": {...metadataSchema, "collapsed": true},
+            "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
-          required: ["value"]
         },
         "eavesOverhang": {
           "title": "Eaves Overhang",
           "type": "object",
           "collapsed": true,
+          "requiredWhen": [
+            "eavesOverhang",
+            "===",
+            "any"
+          ],
           "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
               "type": "number",
-              "default": 0.3,
             },
-            "metadata": {...metadataSchema, "collapsed": true},
+            "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
-          required: ["value"]
         },
         // only for flat roof
-        "baseFloorThickness": {
-          "title": "Base floor thickness",
-          "type": "object",
-          "collapsed": true,
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-              "default": 0.3,
-            },
-            "metadata": {...metadataSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-          required: ["value"]
-        },
+        
         "railingHeight": {
           "title": "Railing height",
           "type": "object",
           "collapsed": true,
+          "requiredWhen": [
+            "railingHeight",
+            "===",
+            "any"
+          ],
           "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
               "type": "number",
-              "default": 1,
             },
-            "metadata": {...metadataSchema, "collapsed": true},
+            "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
-          required: ["value"]
         },
         "railingWidth": {
           "title": "Railing width",
           "type": "object",
           "collapsed": true,
+          "requiredWhen": [
+            "railingWidth",
+            "===",
+            "any"
+          ],
           "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
           "properties": {
             "value": {
               "title": "Value",
               "type": "number",
-              "default": 0.15,
             },
-            "metadata": {...metadataSchema, "collapsed": true},
+            "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
-          required: ["value"]
+          
+        },
+        "baseFloorThickness": {
+          "title": "Base floor thickness",
+          "type": "object",
+          "collapsed": true,
+          "requiredWhen": [
+            "baseFloorThickness",
+            "===",
+            "any"
+          ],
+          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+            },
+            "sources": {...sourcesSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+        },
+        "domePercentVertRadius":{
+          "title": "Base floor thickness",
+          "type": "object",
+          "collapsed": true,
+          "requiredWhen": [
+            "domePercentVertRadius",
+            "===",
+            "any"
+          ],
+          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+            },
+            "sources": {...sourcesSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
+        },
+        "domePercentBaseRadius":{
+          "title": "Base floor thickness",
+          "type": "object",
+          "collapsed": true,
+          "requiredWhen": [
+            "domePercentBaseRadius",
+            "===",
+            "any"
+          ],
+          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "number",
+            },
+            "sources": {...sourcesSchema, "collapsed": true},
+            "paradata": {...paradataSchema, "collapsed": true}
+          },
         },
       },
     },
   },
-  required: ["type"]
+  
 }
 
 
@@ -352,7 +399,7 @@ export const schemas = {
   numberOfFloors: numberOfFloorsSchema,
   floorHeight: floorHeightSchema,
   roof: roofSchema,
-  metadata: metadataSchema,
+  sources: sourcesSchema,
   paradata: paradataSchema,
 }
 export default schemas
@@ -365,7 +412,7 @@ export const cityobjectAttributesSchema = {
     numberOfFloors: {...numberOfFloorsSchema, collapsed: true},
     floorHeight: {...floorHeightSchema, collapsed: true},
     roof: {...roofSchema, collapsed: true},
-    //metadata: {...metadataSchema, collapsed: true},
+    //sources: {...sourcesSchema, collapsed: true},
     //paradata: {...paradataSchema, collapsed: true},
   },
   required: ["height", "numberOfFloors", "floorHeight", "roof"]
