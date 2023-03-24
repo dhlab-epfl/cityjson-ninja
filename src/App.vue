@@ -210,6 +210,13 @@
         </div>
         <button
           type="button"
+          class="btn mr-1"
+          :class="[ file_loaded ? 'btn-outline-light' : 'btn-outline-dark' ]"
+          @click="clickUserButton()"
+        >
+          <i class="fas fa-user mr-1"></i> {{username? username: "Login"}}
+        </button><button
+          type="button"
           class="btn btn-outline-info mr-1"
           data-toggle="modal"
           data-target="#configModal"
@@ -765,11 +772,48 @@ export default {
 			}*/
 
 		},
+    loadUsername(){
+      const username = localStorage.getItem("username")
+      if(username){
+        this.username = username 
+      }
+      return username
+    },
+    login(){
+      const prompt = this.username?
+        "Your current username is '"+this.username+"'.\n Please enter your new user name (or cancel to keep current one):" :
+        "Please enter your user name:"
+      const newUsername = window.prompt(prompt)
+      if(newUsername){
+        this.username = newUsername 
+        localStorage.setItem("username", this.username);
+      }
+    },
+    /**
+     * Get username from localStorage and if absent ask for it and save it to LocalStorage
+     * Not intended as a safety feature: expect only trusted user
+     */
     getUsername(){
       if(!this.username){
-        this.username = window.prompt("Please enter your user name:")
+        this.loadUsername()
+        if(!this.username){
+          this.login()
+        }
       }
       return this.username
+    },
+    logout(){
+      if(window.confirm("Logged in as '"+this.username+"'.\nAre you sure you want to logout?")){
+        this.username=false
+        localStorage.removeItem("username");
+      }
+    },
+    clickUserButton(){
+      if(!this.username){
+        this.login()
+      }else{
+        this.logout()
+      }
     },
 		reset() {
 
@@ -883,6 +927,7 @@ export default {
 	},
   mounted(){
     this.getCityModels()
+    this.loadUsername()
   }
 };
 </script>
