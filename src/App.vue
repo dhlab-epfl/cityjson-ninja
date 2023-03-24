@@ -185,6 +185,21 @@
         :src="logoUrl"
         :class="[ file_loaded ? 'logo-regular' : 'logo-big' ]"
       > <span :class="{ 'text-big' : !file_loaded }">ninja</span></a>
+      <div
+        v-show="error_message"
+        class="alert alert-danger mb-0 mt-1 py-1 px-2"
+        role="alert"
+      >
+        {{ error_message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div
           v-show="loading"
@@ -427,21 +442,6 @@
       <main>
           <div class="row">
             <div class="col-12 py-md-3 pl-md-5">
-              <div
-                v-show="error_message"
-                class="alert alert-danger"
-                role="alert"
-              >
-                {{ error_message }}
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="alert"
-                  aria-label="Close"
-                >
-                <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
               <h2>Choose a model</h2>
               <p>Click on a model to have fun!</p>
               <CityJSONsList
@@ -877,7 +877,7 @@ export default {
         console.log("App.saveCityObject() cityobjectsToRemodel: ", this.cityobjectsToRemodel)
         return this.cityobjectsToRemodel.push(cityobject_id)
       }else{
-        this.alert_error("No username provided, save canceled.\nPlease provide a username to allow saving.")
+        this.alert_error("No username provided, save canceled. Please provide a username to allow saving. ")
       }
     }
 	},
