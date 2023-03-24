@@ -100,6 +100,7 @@ export const heightSchema = {
       "sources": {...sourcesSchema, "collapsed": true},
       "paradata": {...paradataSchema, "collapsed": true}
     },
+    required: ["value"]
 }
 
 
@@ -123,6 +124,7 @@ export const floorHeightSchema = {
       "sources": {...sourcesSchema, "collapsed": true},
       "paradata": {...paradataSchema, "collapsed": true}
     },
+    required: ["value"]
 }
 
 ///done
@@ -145,6 +147,7 @@ export const numberOfFloorsSchema = {
       "sources": {...sourcesSchema, "collapsed": true},
       "paradata": {...paradataSchema, "collapsed": true}
     },
+    required: ["value"]
 }
 
 
@@ -191,6 +194,7 @@ export const slopeSchema = {
     "sources": {...sourcesSchema, "collapsed": true},
     "paradata": {...paradataSchema, "collapsed": true}
   },
+  required: ["value"],
   "rule": {
     "effect": "HIDE",
     "condition": {
@@ -331,7 +335,7 @@ export const roofSchema = {
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
-          
+          required: ["value"]
         },
         "baseFloorThickness": {
           "title": "Base floor thickness",
@@ -351,6 +355,7 @@ export const roofSchema = {
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
+          required: ["value"]
         },
         "domePercentVertRadius":{
           "title": "Base floor thickness",
@@ -370,6 +375,7 @@ export const roofSchema = {
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
+          required: ["value"]
         },
         "domePercentBaseRadius":{
           "title": "Base floor thickness",
@@ -389,6 +395,7 @@ export const roofSchema = {
             "sources": {...sourcesSchema, "collapsed": true},
             "paradata": {...paradataSchema, "collapsed": true}
           },
+          required: ["value"]
         },
       },
     },
