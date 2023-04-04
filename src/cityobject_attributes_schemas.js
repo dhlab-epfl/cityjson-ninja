@@ -3,7 +3,6 @@ export const CITYOBJECT_ATTRIBUTES_HTML_CLASS="cityobject-attributes-editor"
 export const SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS="sub-cityobject-attributes-editor"
 
 
-
 /// sources schema done:
 export const sourcesSchema = {
   "title": "Sources",
@@ -80,72 +79,62 @@ export const paradataSchema = {
   ]
 }
 
-///done
-export const heightSchema = {
-  "title": "Height",
-    "type": "object",
-    "className": CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-    //"description": "a description example",
-    "properties": {
-      "value": {
-        "title": "Value",
-        "type": "number",
-        //"description": "a number description example",
-        
-        "minimum": 0.2,
-        "exclusiveMinimum": false,
-        "maximum": 200,
-        "exclusiveMaximum": true
+/**
+ * Template for a simple main attribute: meaning a int/str/bool/number main attribute
+ * @param {str} title the displayed attribute title.
+ * @param {object} valueSchema the schema of the "value" property 
+ * @returns a schema for a simple main attribute with its value, sources and paradata definition
+ */
+export function simpleMainAttributeSchema(title, valueSchema){
+  valueSchema["title"] = "Value"
+  return {
+    "title": title,
+      "type": "object",
+      "className": CITYOBJECT_ATTRIBUTES_HTML_CLASS,
+      //"description": "a description example",
+      "properties": {
+        "value": valueSchema,
+        "sources": {...sourcesSchema, "collapsed": true},
+        "paradata": {...paradataSchema, "collapsed": true}
       },
-      "sources": {...sourcesSchema, "collapsed": true},
-      "paradata": {...paradataSchema, "collapsed": true}
-    },
-}
-
-
-///done
-export const floorHeightSchema = {
-  "title": "Floor height",
-    "type": "object",
-    "className": CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-    //"description": "a description example",
-    "properties": {
-      "value": {
-        "title": "Value",
-        "type": "number",
-        //"description": "a number description example",
-        
-        "minimum": 0.2,
-        "exclusiveMinimum": false,
-        "maximum": 10,
-        "exclusiveMaximum": true
-      },
-      "sources": {...sourcesSchema, "collapsed": true},
-      "paradata": {...paradataSchema, "collapsed": true}
-    },
+      required: ["sources", "paradata"]
+  }
 }
 
 ///done
-export const numberOfFloorsSchema = {
-  "title": "Number of floors",
-    "type": "object",
-    "className": CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-    //"description": "a description example",
-    "properties": {
-      "value": {
-        "title": "Value",
-        "type": "number",
-        //"description": "a number description example",
-        
-        "minimum": 1,
-        "exclusiveMinimum": false,
-        "maximum": 100,
-        "exclusiveMaximum": true
-      },
-      "sources": {...sourcesSchema, "collapsed": true},
-      "paradata": {...paradataSchema, "collapsed": true}
-    },
-}
+export const heightSchema = simpleMainAttributeSchema("Height", {
+  "title": "Value",
+  "type": "number",
+  //"description": "a number description example",
+  
+  "minimum": 0.2,
+  "exclusiveMinimum": false,
+  "maximum": 200,
+  "exclusiveMaximum": true
+})
+
+
+///done
+export const floorHeightSchema = simpleMainAttributeSchema("Floor height", {
+  "type": "number",
+  //"description": "a number description example",
+  
+  "minimum": 0.2,
+  "exclusiveMinimum": false,
+  "maximum": 10,
+  "exclusiveMaximum": true
+})
+
+///done
+export const numberOfFloorsSchema = simpleMainAttributeSchema("Number of floors", {
+  "type": "number",
+  //"description": "a number description example",
+  
+  "minimum": 1,
+  "exclusiveMinimum": false,
+  "maximum": 100,
+  "exclusiveMaximum": true
+})
 
 
 
@@ -178,46 +167,86 @@ export const roofTypes = [
 ]
 
 
-export const slopeSchema = {
-  "title": "Roof slope",
-  "type": "object",
-  "collapsed": true,
-  "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-  "properties": {
-    "value": {
-      "title": "Value",
-      "type": "number",
-    },
-    "sources": {...sourcesSchema, "collapsed": true},
-    "paradata": {...paradataSchema, "collapsed": true}
-  },
-  "rule": {
-    "effect": "HIDE",
-    "condition": {
-        "scope": "/properties/value",
-        "schema": { 
-          "enum": ["hip", "gable"]
-        }
-    }
-  }
+/**
+ * Template for a simple secondary attribute: meaning a int/str/bool/number secondary attribute
+ * The difference with simpleMainAttributeSchema() are the css classes and the fact that the object starts collapsed
+ * @param {str} title the displayed attribute title.
+ * @param {object} valueSchema the schema of the "value" property 
+ * @returns a schema for a simple secondary attribute with its value, sources and paradata definition
+ */
+export function secondaryAttributeSchema(title, valueSchema){
+  const schema = simpleMainAttributeSchema(title, valueSchema)
+  schema["collapsed"] = true
+  schema["className"] = SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS
+  return schema
 }
 
-export const roofTypeSchema = {
-  "title": "Roof type",
-  "type": "object",
-  "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-  "properties": {
-    "value": {
-      "title": "Value",
-      "type": "string",
-      "format": "select",
-      "enum": roofTypes
-    },
-    "sources": {...sourcesSchema, "collapsed": true},
-    "paradata": {...paradataSchema, "collapsed": true}
-  },
-  required: ["value"]
-}
+
+export const slopeSchema = secondaryAttributeSchema("Roof slope", {
+  "type": "number",
+})
+
+
+export const roofTypeSchema = secondaryAttributeSchema("Roof type", {
+  "type": "string",
+  "format": "select",
+  "enum": roofTypes
+})
+
+export const roofSlopeSchema = secondaryAttributeSchema("Roof slope", {"type": "number"})
+roofSlopeSchema["requiredWhen"] = [
+  "slope",
+  "===",
+  "any"
+]
+
+export const upperFloorThicknessSchema = secondaryAttributeSchema("Upper floor thickness", {"type": "number"})
+upperFloorThicknessSchema["requiredWhen"] = [
+  "upperFloorThickness",
+  "===",
+  "any"
+]
+
+export const eavesOverhangSchema = secondaryAttributeSchema("Eaves Overhang", {"type": "number"})
+eavesOverhangSchema["requiredWhen"] = [
+  "eavesOverhang",
+  "===",
+  "any"
+]
+
+export const railingHeightSchema = secondaryAttributeSchema("Railing height", {"type": "number"})
+railingHeightSchema["requiredWhen"] = [
+  "railingHeight",
+  "===",
+  "any"
+]
+export const railingWidthSchema = secondaryAttributeSchema("Railing width", {"type": "number"})
+railingWidthSchema["requiredWhen"] = [
+  "railingWidth",
+  "===",
+  "any"
+]
+
+export const baseFloorThicknessSchema = secondaryAttributeSchema("Base floor thickness", {"type": "number"})
+baseFloorThicknessSchema["requiredWhen"] = [
+  "baseFloorThickness",
+  "===",
+  "any"
+]
+
+export const domePercentVertRadiusSchema = secondaryAttributeSchema("Dome vertical radius (%)", {"type": "number"})
+domePercentVertRadiusSchema["requiredWhen"] = [
+  "domePercentVertRadius",
+  "===",
+  "any"
+]
+
+export const domePercentBaseRadiusSchema = secondaryAttributeSchema("Dome base radius (%)", {"type": "number"})
+domePercentBaseRadiusSchema["requiredWhen"] = [
+  "domePercentBaseRadius",
+  "===",
+  "any"
+]
 
 export const roofSchema = {
   "title": "Roof",
@@ -231,161 +260,15 @@ export const roofSchema = {
       "type": "object",
       "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
       "properties": {
-        "slope": {
-          "title": "Roof slope",
-          "type": "object",
-          "requiredWhen": [
-            "slope",
-            "===",
-            "any"
-          ],
-          "collapsed": true,
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          }
-        },
-        "upperFloorThickness": {
-          "title": "Upper floor thickness",
-          "type": "object",
-          "collapsed": true,
-          "requiredWhen": [
-            "upperFloorThickness",
-            "===",
-            "any"
-          ],
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-        },
-        "eavesOverhang": {
-          "title": "Eaves Overhang",
-          "type": "object",
-          "collapsed": true,
-          "requiredWhen": [
-            "eavesOverhang",
-            "===",
-            "any"
-          ],
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-        },
+        "slope": roofSlopeSchema,
+        "upperFloorThickness": upperFloorThicknessSchema,
+        "eavesOverhang": eavesOverhangSchema,
         // only for flat roof
-        
-        "railingHeight": {
-          "title": "Railing height",
-          "type": "object",
-          "collapsed": true,
-          "requiredWhen": [
-            "railingHeight",
-            "===",
-            "any"
-          ],
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-        },
-        "railingWidth": {
-          "title": "Railing width",
-          "type": "object",
-          "collapsed": true,
-          "requiredWhen": [
-            "railingWidth",
-            "===",
-            "any"
-          ],
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-          
-        },
-        "baseFloorThickness": {
-          "title": "Base floor thickness",
-          "type": "object",
-          "collapsed": true,
-          "requiredWhen": [
-            "baseFloorThickness",
-            "===",
-            "any"
-          ],
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-        },
-        "domePercentVertRadius":{
-          "title": "Base floor thickness",
-          "type": "object",
-          "collapsed": true,
-          "requiredWhen": [
-            "domePercentVertRadius",
-            "===",
-            "any"
-          ],
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-        },
-        "domePercentBaseRadius":{
-          "title": "Base floor thickness",
-          "type": "object",
-          "collapsed": true,
-          "requiredWhen": [
-            "domePercentBaseRadius",
-            "===",
-            "any"
-          ],
-          "className": SUB_CITYOBJECT_ATTRIBUTES_HTML_CLASS,
-          "properties": {
-            "value": {
-              "title": "Value",
-              "type": "number",
-            },
-            "sources": {...sourcesSchema, "collapsed": true},
-            "paradata": {...paradataSchema, "collapsed": true}
-          },
-        },
+        "railingHeight": railingHeightSchema,
+        "railingWidth": railingWidthSchema,
+        "baseFloorThickness": baseFloorThicknessSchema,
+        "domePercentVertRadius": domePercentVertRadiusSchema,
+        "domePercentBaseRadius": domePercentBaseRadiusSchema,
       },
     },
   },
