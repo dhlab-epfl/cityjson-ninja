@@ -700,6 +700,7 @@ export default {
       })
     },
     /**
+     * UNUSED as of 5.4.23 
      * Update a list of cityobject_ids modelling
      * Inform the user if any error occurs.
      * Show the loading wheel while the operation is ongoing.
@@ -905,6 +906,7 @@ export default {
         return this.getCityModel(this.citymodel_id)
       })
     },
+    /** UNUSED as of 5.4.23 */
     remodelCityObjectsAndReload(){
       return this.updateCityObjectsModelling(this.citymodel_id, this.cityobjectsToRemodel).then(()=>
         this.getCityModel(this.citymodel_id)
