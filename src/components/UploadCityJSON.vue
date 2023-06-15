@@ -41,13 +41,18 @@ export default {
 
 			let file = this.$refs.cityJSONFile.files[ 0 ];
             console.log("UploadCityJSON file:", file)
-            const citymodel_id = file.name
 
 			if ( ! file || file.type != "application/json" ) {
 				//this.error_message = "This is not a JSON file!";
                 this.$emit("error", "This is not a JSON file!")
 				return;
 			}
+
+            const citymodel_id = window.prompt("What ID do you want to give this cityjson model?", file.name.replace(".json", ""))
+            if(!citymodel_id){
+                this.$emit("error", "Upload canceled (no ID given)")
+            }
+
 
 			let reader = new FileReader();
 			reader.readAsText( file, "UTF-8" );
