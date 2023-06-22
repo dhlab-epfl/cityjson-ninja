@@ -916,9 +916,10 @@ export default {
       const username = this.getUsername()
       //console.log("App.saveCityObject() cityobject_id: ", cityobject_id, " new_cityobject: ", new_cityobject, ", username: ", username)
       if(username){
-        window.prompt("Save message:", 'modified CityObject with id "'+cityobject_id+'"')
+        let edit_message = window.prompt("Save message:", 'modified CityObject with id "'+cityobject_id+'"')
+        edit_message = edit_message? edit_message : false
         this.activeCityModel.CityObjects[cityobject_id] = new_cityobject
-        this.postCityObject(this.citymodel_id, cityobject_id, new_cityobject).then(()=>{
+        this.postCityObject(this.citymodel_id, cityobject_id, new_cityobject, username, edit_message).then(()=>{
           this.getCityModel(this.citymodel_id)
         })
         console.log("App.saveCityObject() cityobjectsToRemodel: ", this.cityobjectsToRemodel)
