@@ -69,8 +69,8 @@ export const paradataSchema = {
     },
     "version": {
       "title": "Version",
-      "type": "number",
-      "default": 0,
+      "type": "string",
+      "default": "0",
     },
   },
   "required": [
@@ -301,3 +301,24 @@ export const cityobjectAttributesSchema = {
   required: ["height", "numberOfFloors", "floorHeight", "roof"]
 }
 
+export const getAttributesPathWithNumberValuesRecursive = (keys, schema) =>{
+  console.log("getAttributesPathWithNumberValuesRecursive() keys", keys, "schema",schema)
+  if("type" in schema && schema.type=="number"){
+    return [keys]
+  }
+  if("properties" in schema){
+    const result = Object.entries(schema.properties).map(([subPropertyName, propertySchema]) => getAttributesPathWithNumberValuesRecursive([...keys, subPropertyName], propertySchema))
+    return result.flat()
+  }
+  return []
+}
+
+console.log("cityobjectAttributesSchema", cityobjectAttributesSchema)
+console.log("heightSchema", heightSchema)
+export const attributesPathWithNumberValues=getAttributesPathWithNumberValuesRecursive([], cityobjectAttributesSchema)
+/**
+ * algorithm to get properties with numbers:
+ * - recursive: propertyName, schema
+ * 
+ * 
+ */

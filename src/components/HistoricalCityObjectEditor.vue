@@ -79,7 +79,8 @@
 //import { getIconStyle } from '../../cityjson-vue-components/src/helpers/icons';
 //import './css/bootstrap.min.v3.3.7.css'
 
-import * as cas from "../cityobject_attributes_schemas.js";
+import * as cas from "../cityobjects/cityobject_attributes_schemas.js";
+import * as u from "../cityobjects/utils.js";
 
 export default {
 	name: "HistoricalCityObjectEditor",
@@ -94,6 +95,7 @@ export default {
 	data() {
 		return {
 			edit_mode: false,
+      latestSavedCityObjectAttribues: {},
       schema: cas.cityobjectAttributesSchema,
       //supportedCityobjectAttributes: [],
       //unsupportedCityobjectAttributes: [], // unused.
@@ -115,9 +117,22 @@ export default {
 	methods: {
     updateCityobjectAttributes(event){
       if(event.isValid){
-        this.$emit( "cityobject-attributes-update", event.value );
+        const comparisonFunk= (l,r,ks)=>{
+
+        }
+        const comparison = u.compareJsons(this.latestSavedCityObjectAttribues, event.value)
+        console.log("compareJsons, len: ",comparison.length, "result:", comparison[0].is_identical, "whole:", comparison, "keys: ",  comparison[0].keys)
+        if(!comparison.every(c=>c.is_identical)){
+          this.latestSavedCityObjectAttribues = event.value
+          this.$emit( "cityobject-attributes-update", event.value );
+        }
       }
     },
-	}
+	},
+  mounted(){
+    console.log("HistoricalCityObjectEditor mounted, cityobjectAttributes:",  JSON.parse(JSON.stringify(this.cityobjectAttributes)))
+    console.log("\tattributesPathWithNumberValues:",  JSON.parse(JSON.stringify(cas.attributesPathWithNumberValues)))
+    this.latestSavedCityObjectAttribues = JSON.parse(JSON.stringify(this.cityobjectAttributes))
+  }
 };
 </script>

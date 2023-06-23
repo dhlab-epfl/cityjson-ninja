@@ -485,6 +485,7 @@ import HcjApiConsumer from "./HcjApiConsumer.js";
 import CityJSONsList from './components/CityJSONsList.vue';
 import UploadCityJSON from './components/UploadCityJSON.vue';
 import HistoricalCityObjectInfo from './components/HistoricalCityObjectInfo.vue';
+import * as u from "./cityobjects/utils.js";
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -762,6 +763,8 @@ export default {
 
 				// `ids` is in the form of [ objectId, geometryId, boudnaryId ]
 				this.selected_objid = ids[ 0 ];
+
+        u.ensureNumberValues(this.activeCityModel.CityObjects[this.selected_objid])
 				this.selectedGeometryId = ids[ 1 ];
 				this.selectedBoundaryId = ids[ 2 ];
 

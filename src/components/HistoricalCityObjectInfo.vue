@@ -394,7 +394,7 @@ export default {
 
 		},
     cityobjectAttributesUpdate(cityobjectAttributes){
-      console.log("cityobjectAttributesUpdate() cityobjectAttributes", cityobjectAttributes)
+      console.log("cityobjectAttributesUpdate() cityobjectAttributes", JSON.parse(JSON.stringify(cityobjectAttributes)))
       this.cityobjectAttributesLastUpdate = cityobjectAttributes
     },
 		saveChanges() {
