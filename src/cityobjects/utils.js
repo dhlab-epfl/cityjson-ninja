@@ -78,7 +78,7 @@ export function compareJsons(
         return [JsonComparison(false, keys, "different types", left, right)]
     }
     // simple equality test for number, string and boolean
-    else if(typeof left==="number" || typeof left==="string" || typeof left==="boolean" || left ===null){
+    else if(typeof left==="number" || typeof left==="string" || typeof left==="boolean" || typeof left==="undefined" || left ===null){
         if(compare_func == null){
             const result = [JsonComparison(left==right, keys, "equality test", left, right)]
             return result
@@ -132,7 +132,8 @@ export function compareJsons(
     // other types are unsupported -> error or false
     }else{
         if(raise_exception_for_unsupported_type){
-            throw "compareJsons(): typeof left=="(typeof left)+" !in [boolean, number, string, Array, object]."+ 
+            throw "compareJsons(): typeof left=="+(typeof left)+" !in [boolean, number, string, Array, object, undefined]."+ 
+                "\n\tkeys="+(keys) + 
                 "\n\ttypeof left="+(typeof left)+", left="+left+ 
                 "\n\ttypeof right="+(typeof right)+", right="+right
         }else{

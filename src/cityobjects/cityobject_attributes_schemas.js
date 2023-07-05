@@ -322,3 +322,83 @@ export const attributesPathWithNumberValues=getAttributesPathWithNumberValuesRec
  * 
  * 
  */
+
+
+
+/**
+ * upperFloorThickness
+ * eavesOverhang
+ * 
+ * 
+ * roof parameters
+ * - flat
+ *    - railingHeight
+ *    - railingWidth
+ *    - baseFloorThickness
+ * - hip
+ *    - slope
+ *    - baseFloorThickness
+ *    - upperFloorThickness
+ *    - eavesOverhang
+ * - gable
+ *    - slope
+ *    - baseFloorThickness
+ *    - upperFloorThickness
+ *    - eavesOverhang
+ * - domed
+ *    - railingHeight
+ *    - railingWidth
+ *    - baseFloorThickness
+ *    - domePercentVertRadius
+ *    - domePercentBaseRadius
+ * 
+ */
+export const roofTypesParametersConditionalDefaults = {
+  flat: {
+      railingHeight: {value:0},
+      railingWidth: {value:0},
+      baseFloorThickness: {value:0}
+  },
+  hip: {
+      slope: {value:0.2},
+      baseFloorThickness: {value:0},
+      upperFloorThickness: {value:0},
+      eavesOverhang: {value:0}
+  },
+  gable: {
+      slope: {value:0.2},
+      baseFloorThickness: {value:0},
+      upperFloorThickness: {value:0},
+      eavesOverhang: {value:0}
+  },
+  domed: {
+      railingHeight: {value:0},
+      railingWidth: {value:0},
+      baseFloorThickness: {value:0},
+      domePercentVertRadius: {value:0.4},
+      domePercentBaseRadius: {value:0.4}
+  }
+}
+
+export function ensureRoofParametersConditionalDefault(attributes){
+  console.log("ensureRoofParametersConditionalDefault()")
+  const newAttributes = structuredClone(attributes)
+  const roof = newAttributes["roof"]
+  if(!roof){
+    console.warn("attributes are missing the attributes['roof'] field.")
+    return newAttributes
+  }
+  console.log("\troof before:", JSON.parse(JSON.stringify(roof)))
+  const roofType = roof["type"] ? roof["type"]["value"] : false
+  if(!roofType){
+    console.warn("attributes are missing the attributes['roof']['type']['value'] field.")
+    return newAttributes
+  }
+  let roofParameters = roof["parameters"]? roof["parameters"] : {}
+
+  const defaultRoofParameters = roofTypesParametersConditionalDefaults[roofType]
+  roof["parameters"] = {...defaultRoofParameters,...roofParameters}
+
+  console.log("\troof after:", JSON.parse(JSON.stringify(roof)))
+  return newAttributes
+}

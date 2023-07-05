@@ -120,19 +120,28 @@ export default {
         const comparisonFunk= (l,r,ks)=>{
 
         }
-        const comparison = u.compareJsons(this.latestSavedCityObjectAttribues, event.value)
+        const attributes = event.value
+        const comparison = u.compareJsons(this.latestSavedCityObjectAttribues, attributes)
         console.log("compareJsons, len: ",comparison.length, "result:", comparison[0].is_identical, "whole:", comparison, "keys: ",  comparison[0].keys)
         if(!comparison.every(c=>c.is_identical)){
-          this.latestSavedCityObjectAttribues = event.value
-          this.$emit( "cityobject-attributes-update", event.value );
+          const newAttributes = cas.ensureRoofParametersConditionalDefault(attributes)
+          this.latestSavedCityObjectAttribues = newAttributes
+          this.$emit( "cityobject-attributes-update", newAttributes );
         }
       }
     },
+    cityobjectAttributesPropsChange(newAttributes, oldAttributes){
+      console.log("HistoricalCityObjectEditor cityobjectAttributesPropsChange, newAttributes:",  JSON.parse(JSON.stringify(newAttributes)))
+      console.log("\tattributesPathWithNumberValues:",  JSON.parse(JSON.stringify(cas.attributesPathWithNumberValues)))
+      this.latestSavedCityObjectAttribues = JSON.parse(JSON.stringify(newAttributes))
+    }
 	},
+  watch: {
+    cityobjectAttributes: (...args)=> this.cityobjectAttributesPropsChange(...args)
+  },
   mounted(){
     console.log("HistoricalCityObjectEditor mounted, cityobjectAttributes:",  JSON.parse(JSON.stringify(this.cityobjectAttributes)))
-    console.log("\tattributesPathWithNumberValues:",  JSON.parse(JSON.stringify(cas.attributesPathWithNumberValues)))
-    this.latestSavedCityObjectAttribues = JSON.parse(JSON.stringify(this.cityobjectAttributes))
+    this.cityobjectAttributesPropsChange()
   }
 };
 </script>
